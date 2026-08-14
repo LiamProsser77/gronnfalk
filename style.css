@@ -17,7 +17,7 @@ body {
     overflow: hidden;
 }
 
-/* Main layout */
+/* Main content */
 
 .search-page {
     position: absolute;
@@ -27,7 +27,7 @@ body {
     transform: translate(-50%, -50%);
 
     width: 100%;
-    max-width: 750px;
+    max-width: 700px;
 
     display: flex;
     flex-direction: column;
@@ -39,12 +39,13 @@ body {
 /* GronnFalk logo */
 
 .logo {
-    width: 240px;
+    width: 600px;
+    max-width: 92%;
     height: auto;
 
     display: block;
 
-    margin-bottom: 32px;
+    margin-bottom: 30px;
 
     object-fit: contain;
 }
@@ -143,7 +144,7 @@ body {
     stroke-linecap: round;
 }
 
-/* Lime green corner triangles */
+/* Corner triangles */
 
 .corner {
     position: fixed;
@@ -240,7 +241,9 @@ footer {
     }
 
     .logo {
-        width: 190px;
+        width: 92%;
+        max-width: 500px;
+
         margin-bottom: 26px;
     }
 
