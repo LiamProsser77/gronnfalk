@@ -167,32 +167,32 @@ body {
     top: 0;
     left: 0;
 
-    border-top: 82px solid #7CFC00;
-    border-right: 82px solid transparent;
+    border-top: 100px solid #7CFC00;
+    border-right: 100px solid transparent;
 }
 
 .corner-top-right {
     top: 0;
     right: 0;
 
-    border-top: 82px solid #7CFC00;
-    border-left: 82px solid transparent;
+    border-top: 100px solid #7CFC00;
+    border-left: 100px solid transparent;
 }
 
 .corner-bottom-left {
     bottom: 0;
     left: 0;
 
-    border-bottom: 82px solid #7CFC00;
-    border-right: 82px solid transparent;
+    border-bottom: 100px solid #7CFC00;
+    border-right: 100px solid transparent;
 }
 
 .corner-bottom-right {
     bottom: 0;
     right: 0;
 
-    border-bottom: 82px solid #7CFC00;
-    border-left: 82px solid transparent;
+    border-bottom: 100px solid #7CFC00;
+    border-left: 100px solid transparent;
 }
 
 /* GitHub footer */
@@ -201,7 +201,7 @@ footer {
     position: fixed;
 
     left: 0;
-    bottom: 19px;
+    bottom: 20px;
 
     width: 100%;
 
@@ -215,13 +215,13 @@ footer {
     display: inline-flex;
     align-items: center;
 
-    gap: 7px;
+    gap: 8px;
 
     color: #666666;
 
     text-decoration: none;
 
-    font-size: 14px;
+    font-size: 16px;
 
     transition: color 0.2s ease;
 }
@@ -231,8 +231,8 @@ footer {
 }
 
 .github-icon {
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
 
     fill: currentColor;
 }
@@ -277,23 +277,23 @@ footer {
     }
 
     .corner-top-left {
-        border-top-width: 62px;
-        border-right-width: 62px;
+        border-top-width: 68px;
+        border-right-width: 68px;
     }
 
     .corner-top-right {
-        border-top-width: 62px;
-        border-left-width: 62px;
+        border-top-width: 68px;
+        border-left-width: 68px;
     }
 
     .corner-bottom-left {
-        border-bottom-width: 62px;
-        border-right-width: 62px;
+        border-bottom-width: 68px;
+        border-right-width: 68px;
     }
 
     .corner-bottom-right {
-        border-bottom-width: 62px;
-        border-left-width: 62px;
+        border-bottom-width: 68px;
+        border-left-width: 68px;
     }
 
     footer {
@@ -301,11 +301,11 @@ footer {
     }
 
     .github-link {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     .github-icon {
-        width: 14px;
-        height: 14px;
+        width: 17px;
+        height: 17px;
     }
 }
