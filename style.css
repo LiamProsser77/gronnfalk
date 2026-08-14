@@ -17,13 +17,10 @@ body {
     overflow: hidden;
 }
 
-/* =========================
-   Main layout
-   ========================= */
+/* Main layout */
 
 .search-page {
     position: absolute;
-
     top: 50%;
     left: 50%;
 
@@ -39,12 +36,10 @@ body {
     padding: 20px;
 }
 
-/* =========================
-   GronnFalk logo
-   ========================= */
+/* GronnFalk logo */
 
 .logo {
-    width: 165px;
+    width: 190px;
     height: auto;
 
     display: block;
@@ -54,9 +49,7 @@ body {
     object-fit: contain;
 }
 
-/* =========================
-   Search bar
-   ========================= */
+/* Search bar */
 
 .search-form {
     width: 100%;
@@ -87,8 +80,7 @@ body {
 .search-box:focus-within {
     border-color: #888888;
 
-    box-shadow:
-        0 0 0 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 .search-box input {
@@ -151,9 +143,7 @@ body {
     stroke-linecap: round;
 }
 
-/* =========================
-   Lime green corner triangles
-   ========================= */
+/* Corner triangles */
 
 .corner {
     position: fixed;
@@ -198,9 +188,7 @@ body {
     border-left: 75px solid transparent;
 }
 
-/* =========================
-   GitHub footer
-   ========================= */
+/* GitHub footer */
 
 footer {
     position: fixed;
@@ -220,13 +208,13 @@ footer {
     display: inline-flex;
     align-items: center;
 
-    gap: 5px;
+    gap: 6px;
 
     color: #666666;
 
     text-decoration: none;
 
-    font-size: 11px;
+    font-size: 13px;
 
     transition: color 0.2s ease;
 }
@@ -236,15 +224,13 @@ footer {
 }
 
 .github-icon {
-    width: 12px;
-    height: 12px;
+    width: 15px;
+    height: 15px;
 
     fill: currentColor;
 }
 
-/* =========================
-   Mobile
-   ========================= */
+/* Mobile */
 
 @media (max-width: 600px) {
 
@@ -254,7 +240,7 @@ footer {
     }
 
     .logo {
-        width: 140px;
+        width: 160px;
         margin-bottom: 22px;
     }
 
@@ -305,11 +291,11 @@ footer {
     }
 
     .github-link {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     .github-icon {
-        width: 11px;
-        height: 11px;
+        width: 13px;
+        height: 13px;
     }
 }
