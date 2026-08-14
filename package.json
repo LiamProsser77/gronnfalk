@@ -1,0 +1,12 @@
+{
+  "name": "gronnfalk-api",
+  "version": "1.0.0",
+  "description": "GronnFalk search backend",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
