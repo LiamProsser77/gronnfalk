@@ -18,7 +18,7 @@ body {
 }
 
 /* =========================
-   Center content
+   Main layout
    ========================= */
 
 .search-page {
@@ -30,7 +30,7 @@ body {
     transform: translate(-50%, -50%);
 
     width: 100%;
-    max-width: 700px;
+    max-width: 650px;
 
     display: flex;
     flex-direction: column;
@@ -49,7 +49,7 @@ body {
 
     display: block;
 
-    margin-bottom: 28px;
+    margin-bottom: 25px;
 
     object-fit: contain;
 }
@@ -60,7 +60,7 @@ body {
 
 .search-form {
     width: 100%;
-    max-width: 600px;
+    max-width: 590px;
 }
 
 .search-box {
@@ -72,8 +72,8 @@ body {
 
     background: #ffffff;
 
-    border: 1.5px solid #cfcfcf;
-    border-radius: 26px;
+    border: 1.5px solid #bdbdbd;
+    border-radius: 28px;
 
     transition:
         border-color 0.2s ease,
@@ -81,7 +81,7 @@ body {
 }
 
 .search-box:hover {
-    border-color: #aaaaaa;
+    border-color: #999999;
 }
 
 .search-box:focus-within {
@@ -102,11 +102,11 @@ body {
 
     background: transparent;
 
-    padding: 0 18px;
-
-    font-size: 16px;
+    padding: 0 19px;
 
     color: #202020;
+
+    font-size: 16px;
 }
 
 .search-box input::placeholder {
@@ -152,7 +152,7 @@ body {
 }
 
 /* =========================
-   Corner triangles
+   Lime green corner triangles
    ========================= */
 
 .corner {
@@ -161,54 +161,52 @@ body {
     width: 0;
     height: 0;
 
-    pointer-events: none;
-
     z-index: 2;
-}
 
-/* GronnFalk accent color */
+    pointer-events: none;
+}
 
 .corner-top-left {
     top: 0;
     left: 0;
 
-    border-top: 72px solid #2e8b57;
-    border-right: 72px solid transparent;
+    border-top: 75px solid #7CFC00;
+    border-right: 75px solid transparent;
 }
 
 .corner-top-right {
     top: 0;
     right: 0;
 
-    border-top: 72px solid #2e8b57;
-    border-left: 72px solid transparent;
+    border-top: 75px solid #7CFC00;
+    border-left: 75px solid transparent;
 }
 
 .corner-bottom-left {
     bottom: 0;
     left: 0;
 
-    border-bottom: 72px solid #2e8b57;
-    border-right: 72px solid transparent;
+    border-bottom: 75px solid #7CFC00;
+    border-right: 75px solid transparent;
 }
 
 .corner-bottom-right {
     bottom: 0;
     right: 0;
 
-    border-bottom: 72px solid #2e8b57;
-    border-left: 72px solid transparent;
+    border-bottom: 75px solid #7CFC00;
+    border-left: 75px solid transparent;
 }
 
 /* =========================
-   GitHub
+   GitHub footer
    ========================= */
 
 footer {
     position: fixed;
 
     left: 0;
-    bottom: 18px;
+    bottom: 17px;
 
     width: 100%;
 
@@ -222,13 +220,13 @@ footer {
     display: inline-flex;
     align-items: center;
 
-    gap: 6px;
+    gap: 5px;
 
     color: #666666;
 
     text-decoration: none;
 
-    font-size: 12px;
+    font-size: 11px;
 
     transition: color 0.2s ease;
 }
@@ -238,8 +236,8 @@ footer {
 }
 
 .github-icon {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
 
     fill: currentColor;
 }
@@ -252,14 +250,12 @@ footer {
 
     .search-page {
         max-width: 100%;
-
         padding: 20px;
     }
 
     .logo {
         width: 140px;
-
-        margin-bottom: 24px;
+        margin-bottom: 22px;
     }
 
     .search-form {
@@ -305,16 +301,15 @@ footer {
     }
 
     footer {
-        bottom: 14px;
+        bottom: 13px;
     }
 
     .github-link {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     .github-icon {
-        width: 12px;
-        height: 12px;
+        width: 11px;
+        height: 11px;
     }
 }
-```
