@@ -60,14 +60,26 @@ app.get("/search", async (req, res) => {
             }
         });
 
+        const text = await response.text();
+
         if (!response.ok) {
             return res.status(502).json({
                 error: "SearXNG search failed",
-                status: response.status
+                status: response.status,
+                response: text.substring(0, 1000)
             });
         }
 
-        const data = await response.json();
+        let data;
+
+        try {
+            data = JSON.parse(text);
+        } catch {
+            return res.status(502).json({
+                error: "SearXNG did not return JSON",
+                response: text.substring(0, 1000)
+            });
+        }
 
         res.json({
             query: query,
@@ -79,7 +91,8 @@ app.get("/search", async (req, res) => {
         console.error("Search error:", error);
 
         res.status(500).json({
-            error: "Unable to contact SearXNG"
+            error: "Unable to contact SearXNG",
+            details: error.message
         });
     }
 });
