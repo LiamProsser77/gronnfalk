@@ -1,4 +1,4 @@
-const SEARXNG_API = "";
+const SEARXNG_API = "https://searx.party";
 
 const searchForm = document.querySelector(".search-form");
 const searchInput = document.querySelector(".search-box input");
