@@ -288,9 +288,11 @@ async function searchSearXNG() {
             params.set("categories", "news");
         }
 
-        const response = await fetch(
-            `${SEARXNG_API}/search?${params.toString()}`
-        );
+        params.set("category", currentCategory);
+
+const response = await fetch(
+    `${SEARXNG_API}/search?${params.toString()}`
+);
 
         if (!response.ok) {
             throw new Error(
