@@ -2,6 +2,13 @@ const express = require("express");
 
 const app = express();
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+});
+
 const PORT = process.env.PORT || 3000;
 const SEARXNG_API = "https://searx.party";
 
