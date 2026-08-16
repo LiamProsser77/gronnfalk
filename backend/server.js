@@ -10,7 +10,7 @@ app.use((req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const SEARXNG_API = "https://baresearch.org";
+const SEARXNG_API = "https://searxng.website";
 
 app.use(express.json());
 
