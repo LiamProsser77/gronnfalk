@@ -70,6 +70,26 @@ docker compose up -d --build</code></pre>
   <li><code>.dockerignore</code> — Excludes unnecessary files from the image.</li>
 </ul>
 
+<h3> Deploy GronnFalk with Render</h3>
+
+<p> <a href="https://render.com/deploy?repo=https://github.com/LiamProsser77/gronnfalk"> <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render"> </a> </p>
+
+<p> Deploy your own GronnFalk instance to Render directly from GitHub. </p>
+
+<h4>Requirements</h4>
+
+<ul> <li>A GitHub account</li> <li>A Render account</li> </ul>
+
+<h4>Installation</h4>
+
+<ol> <li>Click the <strong>Deploy to Render</strong> button above.</li> <li>Sign in to Render with your GitHub account.</li> <li>Review the GronnFalk deployment settings.</li> <li>Click <strong>Apply</strong> or <strong>Deploy</strong>.</li> <li>Wait for Render to build and start your GronnFalk instance.</li> </ol>
+
+<p> Once deployment is complete, Render will provide you with a URL for your own GronnFalk instance. </p>
+
+<h4>Render Files</h4>
+
+<ul> <li><code>render.yaml</code> — Configures the GronnFalk Render deployment.</li> </ul>
+
  ## About GronnFalk
 
 GronnFalk was founded on **August 14, 2026**, from an unexpected source of inspiration: a bar of soap.
