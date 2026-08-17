@@ -27,6 +27,13 @@ app.get("/health", (req, res) => {
     });
 });
 
+app.get("/search-test", (req, res) => {
+    res.json({
+        test: "search route works",
+        status: "ok"
+    });
+});
+
 // Diagnostic test route
 app.get("/search-test", (req, res) => {
     res.json({
