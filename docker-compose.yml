@@ -1,0 +1,7 @@
+services:
+  gronnfalk:
+    build: .
+    container_name: gronnfalk
+    ports:
+      - "8080:80"
+    restart: unless-stopped
