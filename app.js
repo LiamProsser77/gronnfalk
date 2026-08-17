@@ -1,4 +1,4 @@
-const SEARXNG_API = "https://gronnfalk.dockhosting.dev";
+const SEARXNG_API = "https://liamprosser77.github.io/gronnfalk/";
 
 const searchForm = document.querySelector(".search-form");
 const searchInput = document.querySelector(".search-box input");
