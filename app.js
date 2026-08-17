@@ -1,4 +1,4 @@
-const SEARXNG_API = "https://liamprosser77.github.io/gronnfalk/";
+const SEARXNG_API = "https://searx.perennialte.ch";
 
 const searchForm = document.querySelector(".search-form");
 const searchInput = document.querySelector(".search-box input");
