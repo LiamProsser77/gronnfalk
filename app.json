@@ -1,0 +1,16 @@
+{
+  "name": "GronnFalk",
+  "description": "A privacy-focused open-source metasearch engine.",
+  "repository": "https://github.com/LiamProsser77/gronnfalk",
+  "keywords": [
+    "search",
+    "metasearch",
+    "privacy",
+    "open-source"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
