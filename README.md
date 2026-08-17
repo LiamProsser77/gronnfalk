@@ -79,6 +79,22 @@ The project is developed publicly on GitHub, where the community can explore the
 
 **A search engine born from an unlikely inspiration.**
 
+## Pronunciation
+
+### GronnFalk
+
+**English:** `/ˈɡrɒn.fɔːlk/` — **GRON-fawk**  
+**Norwegian:** `/ˈɡrʊn.fɑlk/` — **GROON-falk**
+
+**Simple pronunciation:** **GRON-falk**
+
+The name **GronnFalk** was inspired by Norwegian-style naming, giving the project its distinctive sound and character. In English it means **Green Falcon**.
+
+### License 
+
+GronnFalk is licensed under the Apache License 2.0.
+
+
 
 
 
