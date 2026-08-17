@@ -6,8 +6,11 @@
   <img src="https://img.shields.io/badge/Privacy--first-yes-brightgreen.svg" alt="Privacy-first: yes" />
   <img src="https://img.shields.io/github/last-commit/LiamProsser77/gronnfalk" alt="Last commit" />
 </p>
+<p align="center">
+  <strong>"The simple soap search"</strong><br/>
 
-#### GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
+<p align="center">
+GronnFalk is an Norwegian, open-source, privacy-focused metasearch engine built for a simple and independent search experience. 
 
 ## Install
 
