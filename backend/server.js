@@ -27,6 +27,15 @@ app.get("/health", (req, res) => {
     });
 });
 
+// Diagnostic test route
+app.get("/search-test", (req, res) => {
+    res.json({
+        test: "search route works",
+        backend: "GronnFalk",
+        status: "online"
+    });
+});
+
 app.get("/search", async (req, res) => {
     const query = req.query.q;
     const category = req.query.category || "general";
