@@ -66,7 +66,18 @@ docker compose up -d --build</code></pre>
   <li><code>docker-compose.yml</code> — Runs the GronnFalk container.</li>
   <li><code>.dockerignore</code> — Excludes unnecessary files from the image.</li>
 </ul>
- 
+
+ ## About GronnFalk
+
+GronnFalk was founded on **August 14, 2026**, from an unexpected source of inspiration: a bar of soap.
+
+A unique texture inside the soap closely resembled the shape of what would eventually become the GronnFalk logo. That small coincidence sparked the idea behind the project and marked the beginning of GronnFalk.
+
+Since then, GronnFalk has grown into a privacy-focused search engine built around **simplicity, privacy, and open development**.
+
+The project is developed publicly on GitHub, where the community can explore the code, report issues, suggest ideas, and contribute.
+
+**A search engine born from an unlikely inspiration.**
 
 
 
