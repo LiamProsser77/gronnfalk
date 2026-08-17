@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: gronnfalk
+    runtime: node
+    buildCommand: npm install
+    startCommand: node backend/server.js
