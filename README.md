@@ -130,6 +130,10 @@ The project is developed publicly on GitHub, where the community can explore the
 
 The name **GronnFalk** was inspired by Norwegian-style naming, giving the project its distinctive sound and character. In English it means **Green Falcon**.
 
+### Screenshots
+<img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" />
+
+
 ### License 
 
 GronnFalk is licensed under the Apache License 2.0.
