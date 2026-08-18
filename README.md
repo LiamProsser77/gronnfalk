@@ -73,8 +73,7 @@ docker compose up -d --build</code></pre>
 
 ## Deploy with Railway
 
-<p align="center">
-  <a href="https://railway.com/">
+<a href="https://railway.com/">
     <img src="https://img.shields.io/badge/Railway-Supported-8B5CF6?logo=railway&logoColor=white" alt="Railway Supported">
   </a>
 </p>
