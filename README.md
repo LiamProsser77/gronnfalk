@@ -133,6 +133,7 @@ The name **GronnFalk** was inspired by Norwegian-style naming, giving the projec
 ### Screenshots
 <img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" />
 <img width="562" height="230" alt="Screenshot 2026-08-18 12 25 50 PM" src="https://github.com/user-attachments/assets/5ad533f9-5596-4777-a072-6e2d60f03e24" />
+<img width="562" height="230" alt="Screenshot 2026-08-18 12 26 15 PM" src="https://github.com/user-attachments/assets/6601aade-6577-4208-a55a-96ddbda82c21" />
 
 
 ### License 
