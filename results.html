@@ -414,26 +414,7 @@
         );
 
 
-        document
-            .getElementById("imagesTab")
-            .addEventListener("click", function(event) {
-
-                event.preventDefault();
-
-                const query =
-                    searchInput.value.trim();
-
-                if (query) {
-
-                    window.location.href =
-                        `results.html?q=${encodeURIComponent(query)}&category=images`;
-
-                }
-
-            });
-
-
-        document
+       document
             .getElementById("newsTab")
             .addEventListener("click", function(event) {
 
