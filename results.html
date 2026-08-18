@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -173,6 +174,7 @@
         </a>
 
         <div class="search-container">
+
             <form class="search-form" id="searchForm">
 
                 <input
@@ -191,6 +193,7 @@
                 </button>
 
             </form>
+
         </div>
 
     </header>
@@ -208,7 +211,7 @@
 
         <a
             id="imagesTab"
-            href="images.html"
+            href="#"
         >
             Images
         </a>
@@ -237,11 +240,14 @@
         const API_URL =
             "https://gronnfalk.dockhosting.dev/search";
 
+
         const searchInput =
             document.getElementById("searchInput");
 
+
         const searchForm =
             document.getElementById("searchForm");
+
 
         const resultsContainer =
             document.getElementById("results");
@@ -249,9 +255,11 @@
 
         function escapeHTML(text) {
 
-            const div = document.createElement("div");
+            const div =
+                document.createElement("div");
 
-            div.textContent = text || "";
+            div.textContent =
+                text || "";
 
             return div.innerHTML;
         }
@@ -260,14 +268,19 @@
         function getQuery() {
 
             const params =
-                new URLSearchParams(window.location.search);
+                new URLSearchParams(
+                    window.location.search
+                );
 
             return params.get("q") || "";
 
         }
 
 
-        async function search(query, category = "general") {
+        async function search(
+            query,
+            category = "general"
+        ) {
 
             if (!query) {
 
@@ -278,7 +291,9 @@
             }
 
 
-            searchInput.value = query;
+            searchInput.value =
+                query;
+
 
             resultsContainer.innerHTML =
                 '<div class="status">Searching...</div>';
@@ -307,12 +322,15 @@
                     await response.json();
 
 
-                displayResults(data.results || []);
+                displayResults(
+                    data.results || []
+                );
 
 
             } catch (error) {
 
                 console.error(error);
+
 
                 resultsContainer.innerHTML = `
                     <div class="status error">
@@ -345,6 +363,7 @@
                 const resultElement =
                     document.createElement("article");
 
+
                 resultElement.className =
                     "result";
 
@@ -352,8 +371,10 @@
                 const url =
                     result.url || "#";
 
+
                 const title =
                     result.title || "Untitled";
+
 
                 const description =
                     result.content || "";
@@ -384,7 +405,9 @@
                 `;
 
 
-                resultsContainer.appendChild(resultElement);
+                resultsContainer.appendChild(
+                    resultElement
+                );
 
             });
 
@@ -414,23 +437,52 @@
         );
 
 
-       document
-            .getElementById("newsTab")
-            .addEventListener("click", function(event) {
+        document
+            .getElementById("imagesTab")
+            .addEventListener(
+                "click",
+                function(event) {
 
-                event.preventDefault();
+                    event.preventDefault();
 
-                const query =
-                    searchInput.value.trim();
 
-                if (query) {
+                    const query =
+                        searchInput.value.trim();
 
-                    window.location.href =
-                        `results.html?q=${encodeURIComponent(query)}&category=news`;
+
+                    if (query) {
+
+                        window.location.href =
+                            `images.html?q=${encodeURIComponent(query)}`;
+
+                    }
 
                 }
+            );
 
-            });
+
+        document
+            .getElementById("newsTab")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+
+                    const query =
+                        searchInput.value.trim();
+
+
+                    if (query) {
+
+                        window.location.href =
+                            `results.html?q=${encodeURIComponent(query)}&category=news`;
+
+                    }
+
+                }
+            );
 
 
         const initialQuery =
@@ -438,7 +490,9 @@
 
 
         const params =
-            new URLSearchParams(window.location.search);
+            new URLSearchParams(
+                window.location.search
+            );
 
 
         const initialCategory =
@@ -454,3 +508,4 @@
 
 </body>
 </html>
+```
