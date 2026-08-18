@@ -70,7 +70,25 @@ docker compose up -d --build</code></pre>
   <li><code>.dockerignore</code> — Excludes unnecessary files from the image.</li>
 </ul>
 
-<h3> Deploy GronnFalk with Render</h3>
+
+## Deploy with Railway
+
+<p align="center">
+  <a href="https://railway.com/">
+    <img src="https://img.shields.io/badge/Railway-Supported-8B5CF6?logo=railway&logoColor=white" alt="Railway Supported">
+  </a>
+</p>
+
+Deploy your own GronnFalk instance with Railway.
+
+1. Open Railway.
+2. Select **Deploy from GitHub repo**.
+3. Choose **GronnFalk**.
+4. Click **Deploy**.
+
+Railway will automatically use the included `Dockerfile`.
+
+<h3> Deploy with Render</h3>
 
 <p> <a href="https://render.com/deploy?repo=https://github.com/LiamProsser77/gronnfalk"> <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render"> </a> </p>
 
