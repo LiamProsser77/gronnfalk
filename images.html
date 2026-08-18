@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GronnFalk Images</title>
+
+    <meta
+        name="description"
+        content="Search images with GronnFalk."
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            color: #222;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 30px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #8ee000;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 750px;
+        }
+
+        .search-form {
+            display: flex;
+            width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 13px 16px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #8ee000;
+        }
+
+        .search-button {
+            padding: 0 22px;
+            border: none;
+            background: #8ee000;
+            color: #111;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+        }
+
+        .tabs {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 18px 25px 0;
+        }
+
+        .tabs a {
+            display: inline-block;
+            margin-right: 25px;
+            padding-bottom: 10px;
+            color: #555;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .tabs a.active {
+            color: #111;
+            border-bottom: 2px solid #8ee000;
+            font-weight: bold;
+        }
+
+        .images {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .image-result {
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .image-result a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .image-result img {
+            display: block;
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f3f3f3;
+        }
+
+        .image-info {
+            padding: 12px;
+        }
+
+        .image-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .image-source {
+            font-size: 13px;
+            color: #666;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .status {
+            grid-column: 1 / -1;
+            color: #666;
+            padding: 20px 0;
+        }
+
+        .error {
+            color: #b00020;
+        }
+
+        @media (max-width: 700px) {
+
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 15px;
+            }
+
+            .logo {
+                text-align: center;
+            }
+
+            .search-container {
+                max-width: none;
+            }
+
+            .images,
+            .tabs {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .images {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a href="index.html" class="logo">
+            GRONNFALK
+        </a>
+
+        <div class="search-container">
+
+            <form class="search-form" id="searchForm">
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search images"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+                    Search
+                </button>
+
+            </form>
+
+        </div>
+
+    </header>
+
+
+    <nav class="tabs">
+
+        <a
+            href="#"
+            id="webTab"
+        >
+            Web
+        </a>
+
+        <a
+            href="#"
+            id="imagesTab"
+            class="active"
+        >
+            Images
+        </a>
+
+        <a
+            href="#"
+            id="newsTab"
+        >
+            News
+        </a>
+
+    </nav>
+
+
+    <main
+        class="images"
+        id="images"
+    >
+
+        <div class="status">
+            Searching images...
+        </div>
+
+    </main>
+
+
+    <script>
+
+        const API_URL =
+            "https://gronnfalk.dockhosting.dev/search";
+
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+
+        const searchForm =
+            document.getElementById("searchForm");
+
+
+        const imagesContainer =
+            document.getElementById("images");
+
+
+        function escapeHTML(text) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent =
+                text || "";
+
+            return div.innerHTML;
+        }
+
+
+        function getQuery() {
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            return params.get("q") || "";
+        }
+
+
+        async function searchImages(query) {
+
+            if (!query) {
+
+                imagesContainer.innerHTML =
+                    '<div class="status">Enter a search query.</div>';
+
+                return;
+            }
+
+
+            searchInput.value =
+                query;
+
+
+            imagesContainer.innerHTML =
+                '<div class="status">Searching images...</div>';
+
+
+            try {
+
+                const url =
+                    `${API_URL}?q=${encodeURIComponent(query)}&category=images`;
+
+
+                const response =
+                    await fetch(url);
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Search failed: ${response.status}`
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                displayImages(
+                    data.results || []
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                imagesContainer.innerHTML = `
+                    <div class="status error">
+                        Unable to load image results.
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        function displayImages(results) {
+
+            const imageResults =
+                results.filter(
+                    result => result.img_src
+                );
+
+
+            if (!imageResults.length) {
+
+                imagesContainer.innerHTML =
+                    '<div class="status">No images found.</div>';
+
+                return;
+            }
+
+
+            imagesContainer.innerHTML = "";
+
+
+            imageResults.forEach(result => {
+
+                const card =
+                    document.createElement("article");
+
+                card.className =
+                    "image-result";
+
+
+                const imageURL =
+                    result.img_src;
+
+
+                const pageURL =
+                    result.url || imageURL;
+
+
+                const title =
+                    result.title || "Image";
+
+
+                let hostname = "";
+
+                try {
+
+                    hostname =
+                        new URL(pageURL).hostname;
+
+                } catch {
+
+                    hostname = pageURL;
+
+                }
+
+
+                card.innerHTML = `
+
+                    <a
+                        href="${escapeHTML(pageURL)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+
+                        <img
+                            src="${escapeHTML(imageURL)}"
+                            alt="${escapeHTML(title)}"
+                            loading="lazy"
+                            referrerpolicy="no-referrer"
+                        >
+
+                        <div class="image-info">
+
+                            <div class="image-title">
+                                ${escapeHTML(title)}
+                            </div>
+
+                            <div class="image-source">
+                                ${escapeHTML(hostname)}
+                            </div>
+
+                        </div>
+
+                    </a>
+
+                `;
+
+
+                imagesContainer.appendChild(card);
+
+            });
+
+        }
+
+
+        searchForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+
+                const query =
+                    searchInput.value.trim();
+
+
+                if (!query) {
+                    return;
+                }
+
+
+                window.location.href =
+                    `images.html?q=${encodeURIComponent(query)}`;
+
+            }
+        );
+
+
+        document
+            .getElementById("webTab")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    const query =
+                        searchInput.value.trim();
+
+                    if (query) {
+
+                        window.location.href =
+                            `results.html?q=${encodeURIComponent(query)}`;
+
+                    }
+
+                }
+            );
+
+
+        document
+            .getElementById("newsTab")
+            .addEventListener(
+                "click",
+                function(event) {
+
+                    event.preventDefault();
+
+                    const query =
+                        searchInput.value.trim();
+
+                    if (query) {
+
+                        window.location.href =
+                            `news.html?q=${encodeURIComponent(query)}`;
+
+                    }
+
+                }
+            );
+
+
+        const query =
+            getQuery();
+
+
+        searchImages(query);
+
+    </script>
+
+</body>
+</html>
