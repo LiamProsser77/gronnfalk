@@ -1,16 +1,21 @@
-<img width="772" height="250" alt="gronnfalk1" src="https://github.com/user-attachments/assets/c0f60459-d101-4240-bf7e-4c2945934c28" />
+<a href="https://liamprosser77.github.io/gronnfalk/?q=">
+  <img
+    src="https://github.com/user-attachments/assets/cff7ab19-66cf-4a35-a67c-2268849c6e1b"
+    alt="GronnFalk"
+    width="512"
+  >
+</a>
 
-
-<p align="center">
+<p align="left">
   <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0" />
   <img src="https://img.shields.io/badge/Privacy--first-yes-brightgreen.svg" alt="Privacy-first: yes" />
   <img src="https://img.shields.io/github/last-commit/LiamProsser77/gronnfalk" alt="Last commit" />
+  <img src="https://img.shields.io/github/stars/LiamProsser77/gronnfalk" alt="GitHub stars" />
 </p>
 <p align="center">
   <strong>"The simple soap search"</strong><br/>
 
-<p align="center">
-GronnFalk is an Norwegian, open-source, privacy-focused metasearch engine built for a simple and independent search experience. 
+GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
 
 ## Install
 
