@@ -18,6 +18,8 @@
 GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
 
 ## Install
+<details>
+  <summary><strong>Installation Guide</strong></summary>
 
 <h3> Run GronnFalk with Docker</h3>
 
@@ -75,9 +77,14 @@ docker compose up -d --build</code></pre>
   <li><code>.dockerignore</code> — Excludes unnecessary files from the image.</li>
 </ul>
 
+</details>
 
-## Deploy with Railway
+## Deploy
 
+<details>
+  <summary><strong>Deploy Guide</strong></summary>
+
+<h3> Deploy with Railway</h3>
 <a href="https://railway.com/">
     <img src="https://img.shields.io/badge/Railway-Supported-8B5CF6?logo=railway&logoColor=white" alt="Railway Supported">
   </a>
@@ -112,6 +119,8 @@ Railway will automatically use the included `Dockerfile`.
 
 <ul> <li><code>render.yaml</code> — Configures the GronnFalk Render deployment.</li> </ul>
 
+ </details>
+ 
  ## About GronnFalk
 
 GronnFalk was founded on **August 14, 2026**, from an unexpected source of inspiration: a bar of soap.
@@ -135,11 +144,14 @@ The project is developed publicly on GitHub, where the community can explore the
 
 The name **GronnFalk** was inspired by Norwegian-style naming, giving the project its distinctive sound and character. In English it means **Green Falcon**.
 
-### Screenshots
+<details>
+  <summary><strong>Screenshots</strong></summary>
+
 <img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" />
 <img width="562" height="230" alt="Screenshot 2026-08-18 12 25 50 PM" src="https://github.com/user-attachments/assets/5ad533f9-5596-4777-a072-6e2d60f03e24" />
 <img width="562" height="230" alt="Screenshot 2026-08-18 12 26 15 PM" src="https://github.com/user-attachments/assets/6601aade-6577-4208-a55a-96ddbda82c21" />
 
+</details>
 
 ### License 
 
