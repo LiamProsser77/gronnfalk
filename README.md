@@ -17,6 +17,9 @@
 
 GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
 
+## Instances
+Make your own GronnFalk Instance at: <a href="https://github.com/LiamProsser77/gronnfalk-instances">Gronnfalk Instances</a></li>
+
 ## Install
 <details>
   <summary><strong>Installation Guide</strong></summary>
