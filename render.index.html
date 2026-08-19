@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GronnFalk</title>
+
+    <meta
+        name="description"
+        content="GronnFalk — an open-source, privacy-focused metasearch engine."
+    >
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo {
+            width: min(420px, 80vw);
+            height: auto;
+            margin-bottom: 35px;
+        }
+
+        .search-form {
+            width: min(650px, 90vw);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 2px solid #222;
+            border-radius: 30px;
+            padding: 5px 10px 5px 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: 0;
+            outline: none;
+            font-size: 18px;
+            padding: 12px 0;
+            background: transparent;
+        }
+
+        .search-box button {
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .search-box svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .github-link {
+            position: fixed;
+            bottom: 25px;
+            text-decoration: none;
+            color: #222;
+            font-size: 14px;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <img
+        src="/gronnfalk1.png"
+        alt="GronnFalk"
+        class="logo"
+    >
+
+    <form class="search-form" id="searchForm">
+
+        <div class="search-box">
+
+            <input
+                type="search"
+                id="searchInput"
+                name="q"
+                placeholder="Search GronnFalk"
+                autocomplete="off"
+                aria-label="Search GronnFalk"
+            >
+
+            <button type="submit" aria-label="Search">
+
+                <svg viewBox="0 0 24 24">
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
+
+                    <line
+                        x1="16.5"
+                        y1="16.5"
+                        x2="21"
+                        y2="21"
+                    ></line>
+                </svg>
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="status" id="status"></div>
+
+    <a
+        href="https://github.com/LiamProsser77/gronnfalk"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-link"
+    >
+        Free and open source on GitHub
+    </a>
+
+    <script>
+        document
+            .getElementById("searchForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const query =
+                    document.getElementById("searchInput").value.trim();
+
+                if (!query) {
+                    return;
+                }
+
+                window.location.href =
+                    `/results.html?q=${encodeURIComponent(query)}`;
+            });
+    </script>
+
+</body>
+</html>
