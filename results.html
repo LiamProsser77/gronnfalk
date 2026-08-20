@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 
-<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>GronnFalk Search</title>
 
@@ -98,6 +101,65 @@
         padding: 25px;
     }
 
+    .wikipedia-box {
+        display: none;
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #fafafa;
+    }
+
+    .wikipedia-box.visible {
+        display: block;
+    }
+
+    .wikipedia-title {
+        margin: 0 0 10px;
+        font-size: 24px;
+        color: #222;
+    }
+
+    .wikipedia-label {
+        margin-bottom: 6px;
+        font-size: 13px;
+        font-weight: bold;
+        color: #666;
+        text-transform: uppercase;
+    }
+
+    .wikipedia-content {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+    }
+
+    .wikipedia-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .wikipedia-description {
+        margin: 0 0 12px;
+        color: #444;
+        line-height: 1.5;
+        font-size: 15px;
+    }
+
+    .wikipedia-link {
+        color: #1769aa;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .wikipedia-link:hover {
+        text-decoration: underline;
+    }
+
     .result {
         margin-bottom: 30px;
     }
@@ -173,6 +235,15 @@
             padding-left: 15px;
             padding-right: 15px;
         }
+
+        .wikipedia-content {
+            flex-direction: column;
+        }
+
+        .wikipedia-image {
+            width: 120px;
+            height: 120px;
+        }
     }
 </style>
 
@@ -188,24 +259,24 @@
 
 <div class="search-container">
 
-    <form class="search-form" id="searchForm">
+<form class="search-form" id="searchForm">
 
-        <input
-            type="text"
-            id="searchInput"
-            class="search-input"
-            placeholder="Search GronnFalk"
-            autocomplete="off"
-        >
+    <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search GronnFalk"
+        autocomplete="off"
+    >
 
-        <button
-            type="submit"
-            class="search-button"
-        >
-            Search
-        </button>
+    <button
+        type="submit"
+        class="search-button"
+    >
+        Search
+    </button>
 
-    </form>
+</form>
 
 </div>
 
@@ -229,12 +300,597 @@
 
 <main class="results" id="results">
 
-<div class="status">
-    Searching GronnFalk...
+<div
+    id="wikipediaBox"
+    class="wikipedia-box"
+></div>
+
+<div id="searchResults">
+
+    <div class="status">
+        Searching GronnFalk...
+    </div>
+
 </div>
+```
 
 </main>
 
-<script> const API_URL = "https://gronnfalk.dockhosting.dev/search"; const searchInput = document.getElementById("searchInput"); const searchForm = document.getElementById("searchForm"); const resultsContainer = document.getElementById("results"); const webTab = document.getElementById("webTab"); const imagesTab = document.getElementById("imagesTab"); const newsTab = document.getElementById("newsTab"); function escapeHTML(value) { const div = document.createElement("div"); div.textContent = value === null || value === undefined ? "" : String(value); return div.innerHTML; } function safeURL(value) { if (!value) { return ""; } try { const url = new URL(value); if ( url.protocol === "http:" || url.protocol === "https:" ) { return url.href; } } catch (error) { return ""; } return ""; } function getParameters() { return new URLSearchParams( window.location.search ); } function setActiveTab(category) { webTab.classList.remove("active"); imagesTab.classList.remove("active"); newsTab.classList.remove("active"); if (category === "images") { imagesTab.classList.add("active"); } else if (category === "news") { newsTab.classList.add("active"); } else { webTab.classList.add("active"); } } async function search(query, category) { if (!query) { resultsContainer.innerHTML = '<div class="status">Enter a search query.</div>'; return; } searchInput.value = query; setActiveTab(category); resultsContainer.innerHTML = '<div class="status">Searching GronnFalk...</div>'; try { const url = API_URL + "?q=" + encodeURIComponent(query) + "&category=" + encodeURIComponent(category); const response = await fetch(url, { method: "GET", headers: { "Accept": "application/json" } }); if (!response.ok) { throw new Error( "HTTP " + response.status ); } const data = await response.json(); if ( !data || !Array.isArray(data.results) ) { throw new Error( "Invalid API response" ); } displayResults(data.results); } catch (error) { console.error( "GronnFalk search error:", error ); resultsContainer.innerHTML = '<div class="status error">' + 'Unable to load search results.' + '</div>'; } } function displayResults(results) { if (!results || !results.length) { resultsContainer.innerHTML = '<div class="status">No results found.</div>'; return; } resultsContainer.innerHTML = ""; results.forEach(result => { if (!result) { return; } const title = result.title || "Untitled result"; const url = safeURL(result.url); const description = result.content || result.description || ""; const source = result.source || "GronnFalk"; const engine = result.engine || ""; const image = safeURL( result.thumbnail || result.img_src || "" ); const resultElement = document.createElement("article"); resultElement.className = "result"; let imageHTML = ""; if (image) { imageHTML = '<img class="result-image" src="' + escapeHTML(image) + '" alt="" loading="lazy">'; } let titleHTML; if (url) { titleHTML = '<a href="' + escapeHTML(url) + '" target="_blank" rel="noopener noreferrer">' + escapeHTML(title) + '</a>'; } else { titleHTML = escapeHTML(title); } let sourceText = "Fetched from " + escapeHTML(source); if (engine) { sourceText += " · " + escapeHTML(engine); } resultElement.innerHTML = imageHTML + '<div class="result-url">' + escapeHTML(url) + '</div>' + '<h2 class="result-title">' + titleHTML + '</h2>' + '<div class="result-description">' + escapeHTML(description) + '</div>' + '<div class="result-source">' + sourceText + '</div>'; resultsContainer.appendChild( resultElement ); }); } searchForm.addEventListener( "submit", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } const params = new URLSearchParams(); params.set("q", query); params.set( "category", "general" ); window.location.href = "results.html?" + params.toString(); } ); webTab.addEventListener( "click", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } window.location.href = "results.html?q=" + encodeURIComponent(query) + "&category=general"; } ); imagesTab.addEventListener( "click", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } window.location.href = "results.html?q=" + encodeURIComponent(query) + "&category=images"; } ); newsTab.addEventListener( "click", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } window.location.href = "results.html?q=" + encodeURIComponent(query) + "&category=news"; } ); const params = getParameters(); const initialQuery = params.get("q") || ""; const initialCategory = params.get("category") || "general"; search( initialQuery, initialCategory ); </script>
+<script>
 
-</body> </html>
+const API_URL =
+    "https://gronnfalk.dockhosting.dev/search";
+
+const WIKIPEDIA_API =
+    "https://en.wikipedia.org/api/rest_v1/page/summary/";
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const searchForm =
+    document.getElementById("searchForm");
+
+const resultsContainer =
+    document.getElementById("searchResults");
+
+const wikipediaBox =
+    document.getElementById("wikipediaBox");
+
+const webTab =
+    document.getElementById("webTab");
+
+const imagesTab =
+    document.getElementById("imagesTab");
+
+const newsTab =
+    document.getElementById("newsTab");
+
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value === null || value === undefined
+            ? ""
+            : String(value);
+
+    return div.innerHTML;
+
+}
+
+
+function safeURL(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    try {
+
+        const url =
+            new URL(value);
+
+        if (
+            url.protocol === "http:" ||
+            url.protocol === "https:"
+        ) {
+
+            return url.href;
+
+        }
+
+    } catch (error) {
+
+        return "";
+
+    }
+
+    return "";
+
+}
+
+
+function getParameters() {
+
+    return new URLSearchParams(
+        window.location.search
+    );
+
+}
+
+
+function setActiveTab(category) {
+
+    webTab.classList.remove("active");
+    imagesTab.classList.remove("active");
+    newsTab.classList.remove("active");
+
+    if (category === "images") {
+
+        imagesTab.classList.add("active");
+
+    } else if (category === "news") {
+
+        newsTab.classList.add("active");
+
+    } else {
+
+        webTab.classList.add("active");
+
+    }
+
+}
+
+
+async function loadWikipedia(query) {
+
+    wikipediaBox.classList.remove("visible");
+    wikipediaBox.innerHTML = "";
+
+    if (!query) {
+        return;
+    }
+
+    try {
+
+        const title =
+            encodeURIComponent(
+                query.trim().replace(/\s+/g, "_")
+            );
+
+        const response =
+            await fetch(
+                WIKIPEDIA_API + title
+            );
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        if (
+            !data ||
+            !data.title ||
+            !data.extract
+        ) {
+
+            return;
+
+        }
+
+        const image =
+            data.thumbnail &&
+            data.thumbnail.source
+                ? safeURL(data.thumbnail.source)
+                : "";
+
+        const articleURL =
+            data.content_urls &&
+            data.content_urls.desktop &&
+            data.content_urls.desktop.page
+                ? safeURL(
+                    data.content_urls.desktop.page
+                  )
+                : "";
+
+        let imageHTML = "";
+
+        if (image) {
+
+            imageHTML =
+                '<img class="wikipedia-image" src="' +
+                escapeHTML(image) +
+                '" alt="' +
+                escapeHTML(data.title) +
+                '" loading="lazy">';
+
+        }
+
+        let linkHTML = "";
+
+        if (articleURL) {
+
+            linkHTML =
+                '<a class="wikipedia-link" href="' +
+                escapeHTML(articleURL) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                'Read more on Wikipedia' +
+                '</a>';
+
+        }
+
+        wikipediaBox.innerHTML =
+            '<div class="wikipedia-label">' +
+                'Wikipedia' +
+            '</div>' +
+
+            '<h2 class="wikipedia-title">' +
+                escapeHTML(data.title) +
+            '</h2>' +
+
+            '<div class="wikipedia-content">' +
+
+                imageHTML +
+
+                '<div>' +
+
+                    '<p class="wikipedia-description">' +
+                        escapeHTML(data.extract) +
+                    '</p>' +
+
+                    linkHTML +
+
+                '</div>' +
+
+            '</div>';
+
+        wikipediaBox.classList.add("visible");
+
+    } catch (error) {
+
+        console.error(
+            "Wikipedia error:",
+            error
+        );
+
+    }
+
+}
+
+
+async function search(query, category) {
+
+    if (!query) {
+
+        wikipediaBox.classList.remove("visible");
+        wikipediaBox.innerHTML = "";
+
+        resultsContainer.innerHTML =
+            '<div class="status">' +
+            'Enter a search query.' +
+            '</div>';
+
+        return;
+
+    }
+
+    searchInput.value =
+        query;
+
+    setActiveTab(
+        category
+    );
+
+    resultsContainer.innerHTML =
+        '<div class="status">' +
+        'Searching GronnFalk...' +
+        '</div>';
+
+    if (category === "general") {
+
+        loadWikipedia(query);
+
+    } else {
+
+        wikipediaBox.classList.remove("visible");
+        wikipediaBox.innerHTML = "";
+
+    }
+
+    try {
+
+        const url =
+            API_URL +
+            "?q=" +
+            encodeURIComponent(query) +
+            "&category=" +
+            encodeURIComponent(category);
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        if (
+            !data ||
+            !Array.isArray(data.results)
+        ) {
+
+            throw new Error(
+                "Invalid API response"
+            );
+
+        }
+
+        displayResults(
+            data.results
+        );
+
+    } catch (error) {
+
+        console.error(
+            "GronnFalk search error:",
+            error
+        );
+
+        resultsContainer.innerHTML =
+            '<div class="status error">' +
+            'Unable to load search results.' +
+            '</div>';
+
+    }
+
+}
+
+
+function displayResults(results) {
+
+    if (
+        !results ||
+        !results.length
+    ) {
+
+        resultsContainer.innerHTML =
+            '<div class="status">' +
+            'No results found.' +
+            '</div>';
+
+        return;
+
+    }
+
+    resultsContainer.innerHTML = "";
+
+    results.forEach(result => {
+
+        if (!result) {
+            return;
+        }
+
+        const title =
+            result.title ||
+            "Untitled result";
+
+        const url =
+            safeURL(
+                result.url
+            );
+
+        const description =
+            result.content ||
+            result.description ||
+            "";
+
+        const source =
+            result.source ||
+            "GronnFalk";
+
+        const engine =
+            result.engine ||
+            "";
+
+        const image =
+            safeURL(
+                result.thumbnail ||
+                result.img_src ||
+                ""
+            );
+
+        const resultElement =
+            document.createElement(
+                "article"
+            );
+
+        resultElement.className =
+            "result";
+
+        let imageHTML = "";
+
+        if (image) {
+
+            imageHTML =
+                '<img class="result-image" src="' +
+                escapeHTML(image) +
+                '" alt="" loading="lazy">';
+
+        }
+
+        let titleHTML;
+
+        if (url) {
+
+            titleHTML =
+                '<a href="' +
+                escapeHTML(url) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                escapeHTML(title) +
+                '</a>';
+
+        } else {
+
+            titleHTML =
+                escapeHTML(title);
+
+        }
+
+        let sourceText =
+            "Fetched from " +
+            escapeHTML(source);
+
+        if (engine) {
+
+            sourceText +=
+                " · " +
+                escapeHTML(engine);
+
+        }
+
+        resultElement.innerHTML =
+            imageHTML +
+
+            '<div class="result-url">' +
+                escapeHTML(url) +
+            '</div>' +
+
+            '<h2 class="result-title">' +
+                titleHTML +
+            '</h2>' +
+
+            '<div class="result-description">' +
+                escapeHTML(description) +
+            '</div>' +
+
+            '<div class="result-source">' +
+                sourceText +
+            '</div>';
+
+        resultsContainer.appendChild(
+            resultElement
+        );
+
+    });
+
+}
+
+
+searchForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        const params =
+            new URLSearchParams();
+
+        params.set(
+            "q",
+            query
+        );
+
+        params.set(
+            "category",
+            "general"
+        );
+
+        window.location.href =
+            "results.html?" +
+            params.toString();
+
+    }
+);
+
+
+webTab.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        window.location.href =
+            "results.html?q=" +
+            encodeURIComponent(query) +
+            "&category=general";
+
+    }
+);
+
+
+imagesTab.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        window.location.href =
+            "results.html?q=" +
+            encodeURIComponent(query) +
+            "&category=images";
+
+    }
+);
+
+
+newsTab.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        window.location.href =
+            "results.html?q=" +
+            encodeURIComponent(query) +
+            "&category=news";
+
+    }
+);
+
+
+const params =
+    getParameters();
+
+const initialQuery =
+    params.get("q") || "";
+
+const initialCategory =
+    params.get("category") ||
+    "general";
+
+
+search(
+    initialQuery,
+    initialCategory
+);
+
+</script>
+
+</body>
+</html>
