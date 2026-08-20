@@ -17,6 +17,21 @@
 
 GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
 
+<details>
+  <summary><strong>Search Engines crawled by GronnFalk</strong></summary>
+ 
+  <a href="https://searx.dockhosting.dev/">SearXNG</a>
+  
+  <a href="https://search.yonderly.org">4get</a>
+  
+  <a href="https://duckduckgo.com/">DuckDuckGo</a>
+  
+  <a href="https://search.brave.com/">Brave</a>
+  
+  <a href="https://google.com">Google</a>
+  
+  </details>
+
 ## Instances
 Make your own GronnFalk Instance at: <a href="https://github.com/LiamProsser77/gronnfalk-instances">Gronnfalk Instances</a></li>
 
@@ -150,10 +165,7 @@ The name **GronnFalk** was inspired by Norwegian-style naming, giving the projec
 <details>
   <summary><strong>Screenshots</strong></summary>
 
-<img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" />
-<img width="562" height="230" alt="Screenshot 2026-08-18 12 25 50 PM" src="https://github.com/user-attachments/assets/5ad533f9-5596-4777-a072-6e2d60f03e24" />
-<img width="562" height="230" alt="Screenshot 2026-08-18 12 26 15 PM" src="https://github.com/user-attachments/assets/6601aade-6577-4208-a55a-96ddbda82c21" />
-
+<img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" /> <img width="562" height="230" alt="Screenshot2" src="https://github.com/user-attachments/assets/3de3928c-f487-4bd3-b315-a35b554007e8" /> <img width="562" height="230" alt="Screenshot1" src="https://github.com/user-attachments/assets/4f111c05-c901-4a4e-8210-7b7d80623dd1" />
 </details>
 
 ### License 
