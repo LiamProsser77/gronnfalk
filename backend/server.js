@@ -47,25 +47,22 @@ app.get("/search", async (req, res) => {
         });
     }
 
+    const searxngParams = new URLSearchParams();
+
+    searxngParams.set("q", query);
+    searxngParams.set("format", "json");
+
+    if (category === "images" || category === "news") {
+        searxngParams.set("categories", category);
+    }
+
+    const searxngURL =
+        `${SEARXNG_API}/search?${searxngParams.toString()}`;
+
+    const fourgetURL =
+        `${FOURGET_API}?s=${encodeURIComponent(query)}`;
+
     try {
-        const searxngParams = new URLSearchParams();
-
-        searxngParams.set("q", query);
-        searxngParams.set("format", "json");
-
-        if (
-            category === "images" ||
-            category === "news"
-        ) {
-            searxngParams.set("categories", category);
-        }
-
-        const searxngURL =
-            `${SEARXNG_API}/search?${searxngParams.toString()}`;
-
-        const fourgetURL =
-            `${FOURGET_API}?s=${encodeURIComponent(query)}`;
-
         const [searxngResponse, fourgetResponse] =
             await Promise.allSettled([
                 fetch(searxngURL, {
@@ -86,7 +83,6 @@ app.get("/search", async (req, res) => {
         let searxngResults = [];
         let fourgetResults = [];
 
-        // SearXNG
         if (searxngResponse.status === "fulfilled") {
             const response = searxngResponse.value;
 
@@ -117,7 +113,6 @@ app.get("/search", async (req, res) => {
             );
         }
 
-        // 4get
         if (fourgetResponse.status === "fulfilled") {
             const response = fourgetResponse.value;
 
@@ -126,7 +121,7 @@ app.get("/search", async (req, res) => {
                     const data = await response.json();
 
                     fourgetResults = (data.web || []).map(result => ({
-                        title: result.title || "",
+                        title: result.title || "Untitled",
                         url: result.url || "",
                         content: result.description || "",
                         description: result.description || "",
@@ -161,8 +156,8 @@ app.get("/search", async (req, res) => {
             category: category,
             results: combinedResults,
             sources: {
-                searxng: searxngResults.length,
-                fourget: fourgetResults.length
+                SearXNG: searxngResults.length,
+                "4get": fourgetResults.length
             }
         });
 
