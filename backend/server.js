@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 const SEARXNG_API = "https://searx.dockhosting.dev";
 const FOURGET_API = "https://search.yonderly.org/api/v1/web";
+const WIKIPEDIA_API = "https://en.wikipedia.org/api/rest_v1/page/summary/";
 
 app.use(express.json());
 
@@ -176,10 +177,11 @@ return results.filter(result => {
 }
 
 app.get("/search", async (req, res) => {
+
 const query =
-typeof req.query.q === "string"
-? req.query.q.trim()
-: "";
+    typeof req.query.q === "string"
+        ? req.query.q.trim()
+        : "";
 
 const category =
     req.query.category || "general";
@@ -193,17 +195,20 @@ if (!query) {
 const started = Date.now();
 
 try {
-    const [searxngResults, fourgetResults] =
-        await Promise.all([
-            searchSearXNG(
-                query,
-                category
-            ),
-            search4get(
-                query,
-                category
-            )
-        ]);
+
+    const [
+        searxngResults,
+        fourgetResults
+    ] = await Promise.all([
+        searchSearXNG(
+            query,
+            category
+        ),
+        search4get(
+            query,
+            category
+        )
+    ]);
 
     const results =
         removeDuplicates([
@@ -226,6 +231,7 @@ try {
     });
 
 } catch (error) {
+
     console.error(
         "Search error:",
         error
@@ -233,6 +239,88 @@ try {
 
     res.status(500).json({
         error: "Unable to perform search"
+    });
+}
+
+});
+
+app.get("/wikipedia", async (req, res) => {
+
+const query =
+    typeof req.query.q === "string"
+        ? req.query.q.trim()
+        : "";
+
+if (!query) {
+    return res.status(400).json({
+        found: false,
+        error: "Missing search query"
+    });
+}
+
+try {
+
+    const wikipediaTitle =
+        encodeURIComponent(
+            query.replace(/\s+/g, "_")
+        );
+
+    const url =
+        WIKIPEDIA_API +
+        wikipediaTitle;
+
+    const response =
+        await fetchWithTimeout(
+            url,
+            4000
+        );
+
+    if (!response.ok) {
+        return res.json({
+            found: false
+        });
+    }
+
+    const data =
+        await response.json();
+
+    if (!data || !data.extract) {
+        return res.json({
+            found: false
+        });
+    }
+
+    res.json({
+        found: true,
+        title:
+            data.title || query,
+        description:
+            data.description || "",
+        extract:
+            data.extract || "",
+        thumbnail:
+            data.thumbnail &&
+            data.thumbnail.source
+                ? data.thumbnail.source
+                : "",
+        url:
+            data.content_urls &&
+            data.content_urls.desktop &&
+            data.content_urls.desktop.page
+                ? data.content_urls.desktop.page
+                : ""
+    });
+
+} catch (error) {
+
+    console.error(
+        "Wikipedia error:",
+        error.message
+    );
+
+    res.status(500).json({
+        found: false,
+        error: "Wikipedia request failed"
     });
 }
 
