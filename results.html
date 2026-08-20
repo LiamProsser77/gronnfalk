@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -138,6 +137,15 @@
         font-size: 13px;
     }
 
+    .result-image {
+        display: block;
+        width: 180px;
+        max-height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }
+
     .status {
         color: #666;
         padding: 20px 0;
@@ -176,315 +184,225 @@
 
 <header class="topbar">
 
-    <a href="index.html" class="logo">
-        GRONNFALK
-    </a>
+<a href="index.html" class="logo">
+    GRONNFALK
+</a>
 
-    <div class="search-container">
-        <form class="search-form" id="searchForm">
+<div class="search-container">
 
-            <input
-                type="text"
-                id="searchInput"
-                class="search-input"
-                placeholder="Search GronnFalk"
-                autocomplete="off"
-            >
+    <form class="search-form" id="searchForm">
 
-            <button
-                type="submit"
-                class="search-button"
-            >
-                Search
-            </button>
+        <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search GronnFalk"
+            autocomplete="off"
+        >
 
-        </form>
-    </div>
+        <button
+            type="submit"
+            class="search-button"
+        >
+            Search
+        </button>
+
+    </form>
+
+</div>
 
 </header>
 
 <nav class="tabs">
 
-    <a
-        id="webTab"
-        class="active"
-        href="#"
-    >
-        Web
-    </a>
+<a id="webTab" href="#">Web</a>
 
-    <a
-        id="imagesTab"
-        href="#"
-    >
-        Images
-    </a>
+<a id="imagesTab" href="#">Images</a>
 
-    <a
-        id="newsTab"
-        href="#"
-    >
-        News
-    </a>
+<a id="newsTab" href="#">News</a>
 
 </nav>
 
 <main class="results" id="results">
 
-    <div class="status">
-        Searching GronnFalk...
-    </div>
+<div class="status">
+    Searching GronnFalk...
+</div>
 
 </main>
 
 <script>
 
-    const API_URL =
-        "https://gronnfalk.dockhosting.dev/search";
+const API_URL = "https://gronnfalk.dockhosting.dev/search";
 
-    const searchInput =
-        document.getElementById("searchInput");
+const searchInput = document.getElementById("searchInput");
+const searchForm = document.getElementById("searchForm");
+const resultsContainer = document.getElementById("results");
 
-    const searchForm =
-        document.getElementById("searchForm");
+function escapeHTML(value) {
 
-    const resultsContainer =
-        document.getElementById("results");
+    const div = document.createElement("div");
 
+    div.textContent = value == null ? "" : String(value);
 
-    function escapeHTML(text) {
+    return div.innerHTML;
+}
 
-        const div = document.createElement("div");
+function safeURL(value) {
 
-        div.textContent = text || "";
-
-        return div.innerHTML;
+    if (!value) {
+        return "";
     }
 
+    try {
 
-    function getQuery() {
+        const url = new URL(value);
 
-        const params =
-            new URLSearchParams(window.location.search);
-
-        return params.get("q") || "";
-
-    }
-
-
-    async function search(query, category = "general") {
-
-        if (!query) {
-
-            resultsContainer.innerHTML =
-                '<div class="status">Enter a search query.</div>';
-
-            return;
+        if (
+            url.protocol === "http:" ||
+            url.protocol === "https:"
+        ) {
+            return url.href;
         }
 
+    } catch (error) {
+        return "";
+    }
 
-        searchInput.value = query;
+    return "";
+}
+
+function getParameters() {
+
+    return new URLSearchParams(
+        window.location.search
+    );
+
+}
+
+function setActiveTab(category) {
+
+    document.getElementById("webTab").classList.remove("active");
+    document.getElementById("imagesTab").classList.remove("active");
+    document.getElementById("newsTab").classList.remove("active");
+
+    if (category === "images") {
+
+        document
+            .getElementById("imagesTab")
+            .classList.add("active");
+
+    } else if (category === "news") {
+
+        document
+            .getElementById("newsTab")
+            .classList.add("active");
+
+    } else {
+
+        document
+            .getElementById("webTab")
+            .classList.add("active");
+
+    }
+
+}
+
+async function search(query, category) {
+
+    if (!query) {
 
         resultsContainer.innerHTML =
-            '<div class="status">Searching...</div>';
+            '<div class="status">Enter a search query.</div>';
 
+        return;
+    }
 
-        try {
+    searchInput.value = query;
 
-            const url =
-                `${API_URL}?q=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`;
+    setActiveTab(category);
 
+    resultsContainer.innerHTML =
+        '<div class="status">Searching GronnFalk...</div>';
 
-            const response =
-                await fetch(url);
+    try {
 
+        const url =
+            API_URL +
+            "?q=" +
+            encodeURIComponent(query) +
+            "&category=" +
+            encodeURIComponent(category);
 
-            if (!response.ok) {
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
+            cache: "no-store"
+        });
 
-                throw new Error(
-                    `Search failed: ${response.status}`
-                );
+        if (!response.ok) {
 
-            }
-
-
-            const data =
-                await response.json();
-
-
-            displayResults(data.results || []);
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            resultsContainer.innerHTML = `
-                <div class="status error">
-                    Unable to load search results.
-                </div>
-            `;
+            throw new Error(
+                "HTTP " + response.status
+            );
 
         }
+
+        const data = await response.json();
+
+        if (
+            !data ||
+            !Array.isArray(data.results)
+        ) {
+
+            throw new Error(
+                "Invalid GronnFalk API response"
+            );
+
+        }
+
+        displayResults(data.results);
+
+    } catch (error) {
+
+        console.error(
+            "GronnFalk search error:",
+            error
+        );
+
+        resultsContainer.innerHTML = `
+            <div class="status error">
+                Unable to load search results.
+            </div>
+        `;
 
     }
 
+}
 
-    function displayResults(results) {
+function displayResults(results) {
 
-        if (!results.length) {
+    if (!results.length) {
 
-            resultsContainer.innerHTML =
-                '<div class="status">No results found.</div>';
+        resultsContainer.innerHTML =
+            '<div class="status">No results found.</div>';
 
-            return;
-
-        }
-
-
-        resultsContainer.innerHTML = "";
-
-
-        results.forEach(result => {
-
-            const resultElement =
-                document.createElement("article");
-
-            resultElement.className =
-                "result";
-
-
-            const url =
-                result.url || "#";
-
-            const title =
-                result.title || "Untitled";
-
-            const description =
-                result.content ||
-                result.description ||
-                "";
-
-            const source =
-                result.source ||
-                "Unknown";
-
-
-            resultElement.innerHTML = `
-
-                <div class="result-url">
-                    ${escapeHTML(url)}
-                </div>
-
-                <h2 class="result-title">
-
-                    <a
-                        href="${escapeHTML(url)}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        ${escapeHTML(title)}
-                    </a>
-
-                </h2>
-
-                <div class="result-description">
-                    ${escapeHTML(description)}
-                </div>
-
-                <div class="result-source">
-                    Fetched from ${escapeHTML(source)}
-                </div>
-
-            `;
-
-
-            resultsContainer.appendChild(resultElement);
-
-        });
-
+        return;
     }
 
+    resultsContainer.innerHTML = "";
 
-    searchForm.addEventListener(
-        "submit",
-        function(event) {
+    results.forEach(result => {
 
-            event.preventDefault();
+        const title =
+            result.title ||
+            "Untitled result";
 
+        const url =
+            safeURL(result.url);
 
-            const query =
-                searchInput.value.trim();
-
-
-            if (!query) {
-                return;
-            }
-
-
-            window.location.href =
-                `results.html?q=${encodeURIComponent(query)}`;
-
-        }
-    );
-
-
-    document
-        .getElementById("imagesTab")
-        .addEventListener("click", function(event) {
-
-            event.preventDefault();
-
-            const query =
-                searchInput.value.trim();
-
-            if (query) {
-
-                window.location.href =
-                    `results.html?q=${encodeURIComponent(query)}&category=images`;
-
-            }
-
-        });
-
-
-    document
-        .getElementById("newsTab")
-        .addEventListener("click", function(event) {
-
-            event.preventDefault();
-
-            const query =
-                searchInput.value.trim();
-
-            if (query) {
-
-                window.location.href =
-                    `results.html?q=${encodeURIComponent(query)}&category=news`;
-
-            }
-
-        });
-
-
-    const initialQuery =
-        getQuery();
-
-
-    const params =
-        new URLSearchParams(window.location.search);
-
-
-    const initialCategory =
-        params.get("category") || "general";
-
-
-    search(
-        initialQuery,
-        initialCategory
-    );
-
-</script>
-    
-</body>
-</html>
+        const description =
+            result.content ||
+            result
