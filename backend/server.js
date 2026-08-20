@@ -10,7 +10,9 @@ app.use((req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
 const SEARXNG_API = "https://searx.dockhosting.dev";
+const FOURGET_API = "https://search.yonderly.org/api/v1/web";
 
 app.use(express.json());
 
@@ -30,14 +32,6 @@ app.get("/health", (req, res) => {
 app.get("/search-test", (req, res) => {
     res.json({
         test: "search route works",
-        status: "ok"
-    });
-});
-
-// Diagnostic test route
-app.get("/search-test", (req, res) => {
-    res.json({
-        test: "search route works",
         backend: "GronnFalk",
         status: "online"
     });
@@ -54,60 +48,129 @@ app.get("/search", async (req, res) => {
     }
 
     try {
-        const params = new URLSearchParams();
+        const searxngParams = new URLSearchParams();
 
-        params.set("q", query);
-        params.set("format", "json");
+        searxngParams.set("q", query);
+        searxngParams.set("format", "json");
 
         if (
             category === "images" ||
             category === "news"
         ) {
-            params.set("categories", category);
+            searxngParams.set("categories", category);
         }
 
-        const searchURL =
-            `${SEARXNG_API}/search?${params.toString()}`;
+        const searxngURL =
+            `${SEARXNG_API}/search?${searxngParams.toString()}`;
 
-        const response = await fetch(searchURL, {
-            headers: {
-                "User-Agent": "GronnFalk/1.0",
-                "Accept": "application/json"
+        const fourgetURL =
+            `${FOURGET_API}?s=${encodeURIComponent(query)}`;
+
+        const [searxngResponse, fourgetResponse] =
+            await Promise.allSettled([
+                fetch(searxngURL, {
+                    headers: {
+                        "User-Agent": "GronnFalk/1.0",
+                        "Accept": "application/json"
+                    }
+                }),
+
+                fetch(fourgetURL, {
+                    headers: {
+                        "User-Agent": "GronnFalk/1.0",
+                        "Accept": "application/json"
+                    }
+                })
+            ]);
+
+        let searxngResults = [];
+        let fourgetResults = [];
+
+        // SearXNG
+        if (searxngResponse.status === "fulfilled") {
+            const response = searxngResponse.value;
+
+            if (response.ok) {
+                try {
+                    const data = await response.json();
+
+                    searxngResults = (data.results || []).map(result => ({
+                        ...result,
+                        source: "SearXNG"
+                    }));
+                } catch (error) {
+                    console.error(
+                        "SearXNG JSON error:",
+                        error.message
+                    );
+                }
+            } else {
+                console.error(
+                    "SearXNG failed:",
+                    response.status
+                );
             }
-        });
-
-        const text = await response.text();
-
-        if (!response.ok) {
-            return res.status(502).json({
-                error: "SearXNG search failed",
-                status: response.status,
-                response: text.substring(0, 1000)
-            });
+        } else {
+            console.error(
+                "SearXNG connection error:",
+                searxngResponse.reason
+            );
         }
 
-        let data;
+        // 4get
+        if (fourgetResponse.status === "fulfilled") {
+            const response = fourgetResponse.value;
 
-        try {
-            data = JSON.parse(text);
-        } catch {
-            return res.status(502).json({
-                error: "SearXNG did not return JSON",
-                response: text.substring(0, 1000)
-            });
+            if (response.ok) {
+                try {
+                    const data = await response.json();
+
+                    fourgetResults = (data.web || []).map(result => ({
+                        title: result.title || "",
+                        url: result.url || "",
+                        content: result.description || "",
+                        description: result.description || "",
+                        source: "4get"
+                    }));
+                } catch (error) {
+                    console.error(
+                        "4get JSON error:",
+                        error.message
+                    );
+                }
+            } else {
+                console.error(
+                    "4get failed:",
+                    response.status
+                );
+            }
+        } else {
+            console.error(
+                "4get connection error:",
+                fourgetResponse.reason
+            );
         }
+
+        const combinedResults = [
+            ...searxngResults,
+            ...fourgetResults
+        ];
 
         res.json({
             query: query,
             category: category,
-            results: data.results || []
+            results: combinedResults,
+            sources: {
+                searxng: searxngResults.length,
+                fourget: fourgetResults.length
+            }
         });
 
     } catch (error) {
         console.error("Search error:", error);
 
         res.status(500).json({
-            error: "Unable to contact SearXNG",
+            error: "Unable to perform search",
             details: error.message
         });
     }
