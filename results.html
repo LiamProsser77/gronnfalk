@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>GronnFalk Search</title>
 
@@ -215,11 +213,17 @@
 
 <nav class="tabs">
 
-<a id="webTab" href="#">Web</a>
+<a id="webTab" class="active" href="#">
+    Web
+</a>
 
-<a id="imagesTab" href="#">Images</a>
+<a id="imagesTab" href="#">
+    Images
+</a>
 
-<a id="newsTab" href="#">News</a>
+<a id="newsTab" href="#">
+    News
+</a>
 
 </nav>
 
@@ -231,178 +235,6 @@
 
 </main>
 
-<script>
+<script> const API_URL = "https://gronnfalk.dockhosting.dev/search"; const searchInput = document.getElementById("searchInput"); const searchForm = document.getElementById("searchForm"); const resultsContainer = document.getElementById("results"); const webTab = document.getElementById("webTab"); const imagesTab = document.getElementById("imagesTab"); const newsTab = document.getElementById("newsTab"); function escapeHTML(value) { const div = document.createElement("div"); div.textContent = value === null || value === undefined ? "" : String(value); return div.innerHTML; } function safeURL(value) { if (!value) { return ""; } try { const url = new URL(value); if ( url.protocol === "http:" || url.protocol === "https:" ) { return url.href; } } catch (error) { return ""; } return ""; } function getParameters() { return new URLSearchParams( window.location.search ); } function setActiveTab(category) { webTab.classList.remove("active"); imagesTab.classList.remove("active"); newsTab.classList.remove("active"); if (category === "images") { imagesTab.classList.add("active"); } else if (category === "news") { newsTab.classList.add("active"); } else { webTab.classList.add("active"); } } async function search(query, category) { if (!query) { resultsContainer.innerHTML = '<div class="status">Enter a search query.</div>'; return; } searchInput.value = query; setActiveTab(category); resultsContainer.innerHTML = '<div class="status">Searching GronnFalk...</div>'; try { const url = API_URL + "?q=" + encodeURIComponent(query) + "&category=" + encodeURIComponent(category); const response = await fetch(url, { method: "GET", headers: { "Accept": "application/json" } }); if (!response.ok) { throw new Error( "HTTP " + response.status ); } const data = await response.json(); if ( !data || !Array.isArray(data.results) ) { throw new Error( "Invalid API response" ); } displayResults(data.results); } catch (error) { console.error( "GronnFalk search error:", error ); resultsContainer.innerHTML = '<div class="status error">' + 'Unable to load search results.' + '</div>'; } } function displayResults(results) { if (!results || !results.length) { resultsContainer.innerHTML = '<div class="status">No results found.</div>'; return; } resultsContainer.innerHTML = ""; results.forEach(result => { if (!result) { return; } const title = result.title || "Untitled result"; const url = safeURL(result.url); const description = result.content || result.description || ""; const source = result.source || "GronnFalk"; const engine = result.engine || ""; const image = safeURL( result.thumbnail || result.img_src || "" ); const resultElement = document.createElement("article"); resultElement.className = "result"; let imageHTML = ""; if (image) { imageHTML = '<img class="result-image" src="' + escapeHTML(image) + '" alt="" loading="lazy">'; } let titleHTML; if (url) { titleHTML = '<a href="' + escapeHTML(url) + '" target="_blank" rel="noopener noreferrer">' + escapeHTML(title) + '</a>'; } else { titleHTML = escapeHTML(title); } let sourceText = "Fetched from " + escapeHTML(source); if (engine) { sourceText += " · " + escapeHTML(engine); } resultElement.innerHTML = imageHTML + '<div class="result-url">' + escapeHTML(url) + '</div>' + '<h2 class="result-title">' + titleHTML + '</h2>' + '<div class="result-description">' + escapeHTML(description) + '</div>' + '<div class="result-source">' + sourceText + '</div>'; resultsContainer.appendChild( resultElement ); }); } searchForm.addEventListener( "submit", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } const params = new URLSearchParams(); params.set("q", query); params.set( "category", "general" ); window.location.href = "results.html?" + params.toString(); } ); webTab.addEventListener( "click", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } window.location.href = "results.html?q=" + encodeURIComponent(query) + "&category=general"; } ); imagesTab.addEventListener( "click", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } window.location.href = "results.html?q=" + encodeURIComponent(query) + "&category=images"; } ); newsTab.addEventListener( "click", function(event) { event.preventDefault(); const query = searchInput.value.trim(); if (!query) { return; } window.location.href = "results.html?q=" + encodeURIComponent(query) + "&category=news"; } ); const params = getParameters(); const initialQuery = params.get("q") || ""; const initialCategory = params.get("category") || "general"; search( initialQuery, initialCategory ); </script>
 
-const API_URL = "https://gronnfalk.dockhosting.dev/search";
-
-const searchInput = document.getElementById("searchInput");
-const searchForm = document.getElementById("searchForm");
-const resultsContainer = document.getElementById("results");
-
-function escapeHTML(value) {
-
-    const div = document.createElement("div");
-
-    div.textContent = value == null ? "" : String(value);
-
-    return div.innerHTML;
-}
-
-function safeURL(value) {
-
-    if (!value) {
-        return "";
-    }
-
-    try {
-
-        const url = new URL(value);
-
-        if (
-            url.protocol === "http:" ||
-            url.protocol === "https:"
-        ) {
-            return url.href;
-        }
-
-    } catch (error) {
-        return "";
-    }
-
-    return "";
-}
-
-function getParameters() {
-
-    return new URLSearchParams(
-        window.location.search
-    );
-
-}
-
-function setActiveTab(category) {
-
-    document.getElementById("webTab").classList.remove("active");
-    document.getElementById("imagesTab").classList.remove("active");
-    document.getElementById("newsTab").classList.remove("active");
-
-    if (category === "images") {
-
-        document
-            .getElementById("imagesTab")
-            .classList.add("active");
-
-    } else if (category === "news") {
-
-        document
-            .getElementById("newsTab")
-            .classList.add("active");
-
-    } else {
-
-        document
-            .getElementById("webTab")
-            .classList.add("active");
-
-    }
-
-}
-
-async function search(query, category) {
-
-    if (!query) {
-
-        resultsContainer.innerHTML =
-            '<div class="status">Enter a search query.</div>';
-
-        return;
-    }
-
-    searchInput.value = query;
-
-    setActiveTab(category);
-
-    resultsContainer.innerHTML =
-        '<div class="status">Searching GronnFalk...</div>';
-
-    try {
-
-        const url =
-            API_URL +
-            "?q=" +
-            encodeURIComponent(query) +
-            "&category=" +
-            encodeURIComponent(category);
-
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Accept": "application/json"
-            },
-            cache: "no-store"
-        });
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " + response.status
-            );
-
-        }
-
-        const data = await response.json();
-
-        if (
-            !data ||
-            !Array.isArray(data.results)
-        ) {
-
-            throw new Error(
-                "Invalid GronnFalk API response"
-            );
-
-        }
-
-        displayResults(data.results);
-
-    } catch (error) {
-
-        console.error(
-            "GronnFalk search error:",
-            error
-        );
-
-        resultsContainer.innerHTML = `
-            <div class="status error">
-                Unable to load search results.
-            </div>
-        `;
-
-    }
-
-}
-
-function displayResults(results) {
-
-    if (!results.length) {
-
-        resultsContainer.innerHTML =
-            '<div class="status">No results found.</div>';
-
-        return;
-    }
-
-    resultsContainer.innerHTML = "";
-
-    results.forEach(result => {
-
-        const title =
-            result.title ||
-            "Untitled result";
-
-        const url =
-            safeURL(result.url);
-
-        const description =
-            result.content ||
-            result
+</body> </html>
