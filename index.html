@@ -13,74 +13,6 @@
 
 <link rel="stylesheet" href="style.css">
 
-<style>
-    .settings-button {
-        position: fixed;
-        top: 22px;
-        right: 25px;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #ffffff;
-        cursor: pointer;
-        z-index: 10;
-        padding: 0;
-    }
-
-    .settings-button:hover {
-        background: #f5f5f5;
-    }
-
-    .settings-icon {
-        width: 22px;
-        height: 22px;
-        fill: none;
-        stroke: #333;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
-
-    .github-footer {
-        position: fixed;
-        bottom: 18px;
-        left: 0;
-        right: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        z-index: 5;
-    }
-
-    .release-link {
-        color: #666;
-        text-decoration: none;
-        font-size: 14px;
-    }
-
-    .release-link:hover {
-        color: #222;
-        text-decoration: underline;
-    }
-
-    @media (max-width: 700px) {
-        .settings-button {
-            top: 15px;
-            right: 15px;
-        }
-
-        .github-footer {
-            bottom: 15px;
-        }
-    }
-</style>
-
 </head>
 
 <body>
@@ -124,10 +56,8 @@
     >
 
     <!-- Search -->
-    <form
-        class="search-form"
-        id="searchForm"
-    >
+    <form class="search-form" id="searchForm">
+
         <div class="search-box">
 
             <input
@@ -163,22 +93,13 @@
             </button>
 
         </div>
+
     </form>
 
 </main>
 
-<!-- GitHub and Release -->
-<footer class="github-footer">
-
-    <a
-        id="releaseLink"
-        class="release-link"
-        href="https://github.com/LiamProsser77/gronnfalk/releases"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        Release: Loading...
-    </a>
+<!-- GitHub -->
+<footer>
 
     <a
         href="https://github.com/LiamProsser77/gronnfalk"
@@ -186,25 +107,24 @@
         rel="noopener noreferrer"
         class="github-link"
     >
+
         <svg
             class="github-icon"
             viewBox="0 0 24 24"
             aria-hidden="true"
         >
             <path
-                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.13c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.71 1.25 3.37.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47-.11-3.06 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.41.36.78 1.08.78 2.18v3.24c0 .3.21.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.13c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.71 1.25 3.37.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.08.78 2.18v3.24c0 .3.21.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
             ></path>
         </svg>
 
-        <span>
-            Free and open source on GitHub
-        </span>
+        <span>Free and open source on GitHub</span>
+
     </a>
 
 </footer>
 
 <script>
-
     document
         .getElementById("searchForm")
         .addEventListener("submit", function(event) {
@@ -223,9 +143,7 @@
 
             window.location.href =
                 `results.html?q=${encodeURIComponent(query)}`;
-
         });
-
 
     document
         .getElementById("settingsButton")
@@ -234,70 +152,6 @@
             window.location.href = "settings.html";
 
         });
-
-
-    async function loadLatestRelease() {
-
-        const releaseLink =
-            document.getElementById("releaseLink");
-
-        try {
-
-            const response =
-                await fetch(
-                    "https://api.github.com/repos/LiamProsser77/gronnfalk/releases/latest",
-                    {
-                        headers: {
-                            "Accept":
-                                "application/vnd.github+json"
-                        }
-                    }
-                );
-
-            if (!response.ok) {
-                throw new Error(
-                    "GitHub API HTTP " +
-                    response.status
-                );
-            }
-
-            const release =
-                await response.json();
-
-            const version =
-                release.tag_name ||
-                release.name;
-
-            if (!version) {
-                throw new Error(
-                    "No release version found"
-                );
-            }
-
-            releaseLink.textContent =
-                "Release: " +
-                version;
-
-            if (release.html_url) {
-                releaseLink.href =
-                    release.html_url;
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Unable to load latest release:",
-                error
-            );
-
-            releaseLink.textContent =
-                "Releases";
-
-        }
-    }
-
-    loadLatestRelease();
-
 </script>
 
 </body> </html>
