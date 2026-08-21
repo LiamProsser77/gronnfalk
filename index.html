@@ -7,7 +7,6 @@
     name="description"
     content="GronnFalk — an open-source, privacy-focused metasearch engine."
 >
-
 <link rel="icon" type="image/png" href="favicon3.png">
 
 <link rel="stylesheet" href="style.css">
@@ -17,31 +16,35 @@
         position: fixed;
         top: 22px;
         right: 25px;
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #ffffff;
-        cursor: pointer;
-        z-index: 10;
         padding: 0;
+        border: none;
+        background: transparent;
+        color: #222;
+        cursor: pointer;
+        z-index: 20;
     }
 
     .settings-button:hover {
-        background: #f5f5f5;
+        color: #8ee000;
     }
 
     .settings-icon {
-        width: 22px;
-        height: 22px;
-        fill: none;
-        stroke: #333;
-        stroke-width: 2;
-        stroke-linecap: round;
-        stroke-linejoin: round;
+        width: 27px;
+        height: 27px;
+        display: block;
+        fill: currentColor;
+    }
+
+    @media (max-width: 700px) {
+        .settings-button {
+            top: 15px;
+            right: 15px;
+        }
     }
 </style>
 
@@ -63,11 +66,7 @@
         aria-hidden="true"
     >
         <path
-            d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
-        ></path>
-
-        <path
-            d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.4 15a1.7 1.7 0 0 0-1.56-1.04H6.6v-2.4h.24A1.7 1.7 0 0 0 8.4 10a1.7 1.7 0 0 0-.34-1.88L8 8.06l1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56V5h2.4v.2a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.04h.24v2.4h-.24A1.7 1.7 0 0 0 19.4 15Z"
+            d="M19.43 12.98c.04-.32.07-.65.07-.98s-.02-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.31-.6-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98L14.5 2.42C14.47 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.5.42L9.12 5.07c-.61.25-1.18.59-1.69.98l-2.49-1c-.23-.08-.48 0-.6.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.08.65-.08.98s.03.66.08.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.31.6.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.25 1.18-.58 1.69-.98l2.49 1c.23.08.48 0 .6-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65ZM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5Z"
         ></path>
     </svg>
 </button>
@@ -157,33 +156,22 @@
 </footer>
 
 <script>
-    document
-        .getElementById("searchForm")
-        .addEventListener("submit", function(event) {
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+        event.preventDefault();
 
-            event.preventDefault();
+        const query = document.getElementById("searchInput").value.trim();
 
-            const query =
-                document
-                    .getElementById("searchInput")
-                    .value
-                    .trim();
+        if (!query) {
+            return;
+        }
 
-            if (!query) {
-                return;
-            }
+        window.location.href =
+            `results.html?q=${encodeURIComponent(query)}`;
+    });
 
-            window.location.href =
-                `results.html?q=${encodeURIComponent(query)}`;
-        });
-
-    document
-        .getElementById("settingsButton")
-        .addEventListener("click", function() {
-
-            window.location.href = "settings.html";
-
-        });
+    document.getElementById("settingsButton").addEventListener("click", function() {
+        window.location.href = "settings.html";
+    });
 </script>
 
 </body> </html>
