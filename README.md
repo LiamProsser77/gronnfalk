@@ -168,6 +168,9 @@ The name **GronnFalk** was inspired by Norwegian-style naming, giving the projec
 <img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" /> <img width="562" height="230" alt="Screenshot2" src="https://github.com/user-attachments/assets/3de3928c-f487-4bd3-b315-a35b554007e8" /> <img width="562" height="230" alt="Screenshot1" src="https://github.com/user-attachments/assets/4f111c05-c901-4a4e-8210-7b7d80623dd1" />
 </details>
 
+### Why GronnFalk?
+You should use GronnFalk because the other metasearches make you pay for your own domain, hosting costs money, but on GronnFalk make your own free instance on Render or Railway with a piece of mind. Trust me I am a big fan of SearXNG, Whoogle, and 4get but it costs money to make your own domain. 
+
 ### License 
 
 GronnFalk is licensed under the Apache License 2.0.
