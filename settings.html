@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GronnFalk Settings</title>
+
+<link rel="icon" type="image/png" href="favicon3.png">
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #ffffff;
+        color: #222;
+    }
+
+    .settings-page {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 35px 25px 60px;
+    }
+
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 45px;
+    }
+
+    .logo {
+        width: 210px;
+        height: auto;
+        display: block;
+    }
+
+    .settings-title {
+        margin: 0 0 30px;
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .settings-section {
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+        padding: 22px;
+        margin-bottom: 20px;
+        background: #ffffff;
+    }
+
+    .settings-section h2 {
+        margin: 0 0 8px;
+        font-size: 20px;
+    }
+
+    .settings-section p {
+        margin: 0 0 18px;
+        color: #666;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+
+    .language-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .language-option {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #ffffff;
+        color: #222;
+        text-align: left;
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .language-option:hover {
+        border-color: #8ee000;
+    }
+
+    .language-option.active {
+        border-color: #8ee000;
+        background: #f7ffe9;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 11px 18px;
+        border-radius: 8px;
+        background: #8ee000;
+        color: #111;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .back-button:hover {
+        opacity: 0.9;
+    }
+
+    @media (max-width: 700px) {
+        .settings-page {
+            padding: 25px 15px 45px;
+        }
+
+        .logo {
+            width: 175px;
+        }
+
+        .settings-title {
+            font-size: 24px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<main class="settings-page">
+
+    <div class="logo-container">
+        <img
+            src="gronnfalk1.png"
+            alt="GronnFalk"
+            class="logo"
+        >
+    </div>
+
+    <h1 class="settings-title">
+        Settings
+    </h1>
+
+    <section class="settings-section">
+
+        <h2>
+            Language
+        </h2>
+
+        <p>
+            Choose the language you want GronnFalk to use.
+        </p>
+
+        <div class="language-options">
+
+            <button
+                class="language-option"
+                data-language="en"
+                type="button"
+            >
+                English
+            </button>
+
+            <button
+                class="language-option"
+                data-language="no"
+                type="button"
+            >
+                Norsk
+            </button>
+
+            <button
+                class="language-option"
+                data-language="sv"
+                type="button"
+            >
+                Svenska
+            </button>
+
+            <button
+                class="language-option"
+                data-language="da"
+                type="button"
+            >
+                Dansk
+            </button>
+
+        </div>
+
+    </section>
+
+    <a
+        href="index.html"
+        class="back-button"
+    >
+        Back to GronnFalk
+    </a>
+
+</main>
+
+<script>
+    const languageOptions =
+        document.querySelectorAll(".language-option");
+
+    function updateActiveLanguage() {
+
+        const savedLanguage =
+            localStorage.getItem("gronnfalk-language") || "en";
+
+        languageOptions.forEach(function(option) {
+
+            if (
+                option.dataset.language ===
+                savedLanguage
+            ) {
+                option.classList.add("active");
+            } else {
+                option.classList.remove("active");
+            }
+
+        });
+
+    }
+
+    languageOptions.forEach(function(option) {
+
+        option.addEventListener("click", function() {
+
+            const language =
+                option.dataset.language;
+
+            localStorage.setItem(
+                "gronnfalk-language",
+                language
+            );
+
+            updateActiveLanguage();
+
+        });
+
+    });
+
+    updateActiveLanguage();
+</script>
+
+</body> </html>
