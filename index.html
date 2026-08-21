@@ -9,71 +9,191 @@
 >
 <link rel="icon" type="image/png" href="favicon3.png">
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+
+<style>
+    .footer-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 25px;
+        gap: 20px;
+    }
+
+    .footer-left,
+    .footer-center,
+    .footer-right {
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .footer-left {
+        justify-content: flex-start;
+    }
+
+    .footer-center {
+        justify-content: center;
+    }
+
+    .footer-right {
+        justify-content: flex-end;
+    }
+
+    .language-selector {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .language-selector label {
+        color: #666;
+    }
+
+    .language-selector select {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #fff;
+        color: #222;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .release-link {
+        color: #666;
+        text-decoration: none;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .release-link:hover {
+        color: #222;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+        .footer-bar {
+            position: static;
+            flex-direction: column;
+            padding: 15px;
+            margin-top: 30px;
+            gap: 12px;
+        }
+
+        .footer-left,
+        .footer-center,
+        .footer-right {
+            justify-content: center;
+        }
+    }
+</style>
+
 </head>
 
 <body>
 
-    <!-- Corner decorations -->
-    <div class="corner corner-top-left"></div>
-    <div class="corner corner-top-right"></div>
-    <div class="corner corner-bottom-left"></div>
-    <div class="corner corner-bottom-right"></div>
+<!-- Corner decorations -->
+<div class="corner corner-top-left"></div>
+<div class="corner corner-top-right"></div>
+<div class="corner corner-bottom-left"></div>
+<div class="corner corner-bottom-right"></div>
 
-    <main class="search-page">
+<main class="search-page">
 
-        <!-- GronnFalk logo -->
-        <img
-            src="gronnfalk1.png"
-            alt="GronnFalk"
-            class="logo"
-        >
+    <!-- GronnFalk logo -->
+    <img
+        src="gronnfalk1.png"
+        alt="GronnFalk"
+        class="logo"
+    >
 
-        <!-- Search -->
-        <form class="search-form" id="searchForm">
+    <!-- Search -->
+    <form class="search-form" id="searchForm">
 
-            <div class="search-box">
+        <div class="search-box">
 
-                <input
-                    type="search"
-                    id="searchInput"
-                    name="q"
-                    placeholder="Search GronnFalk"
-                    autocomplete="off"
-                    aria-label="Search GronnFalk"
+            <input
+                type="search"
+                id="searchInput"
+                name="q"
+                placeholder="Search GronnFalk"
+                autocomplete="off"
+                aria-label="Search GronnFalk"
+            >
+
+            <button
+                type="submit"
+                aria-label="Search"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
                 >
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
 
-                <button
-                    type="submit"
-                    aria-label="Search"
-                >
-                    <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                    >
-                        <circle
-                            cx="11"
-                            cy="11"
-                            r="7"
-                        ></circle>
+                    <line
+                        x1="16.5"
+                        y1="16.5"
+                        x2="21"
+                        y2="21"
+                    ></line>
+                </svg>
+            </button>
 
-                        <line
-                            x1="16.5"
-                            y1="16.5"
-                            x2="21"
-                            y2="21"
-                        ></line>
-                    </svg>
-                </button>
+        </div>
 
-            </div>
+    </form>
 
-        </form>
+</main>
 
-    </main>
+<!-- Footer -->
+<footer class="footer-bar">
+
+    <!-- Languages -->
+    <div class="footer-left">
+
+        <div class="language-selector">
+
+            <label for="languageSelect">
+                Languages
+            </label>
+
+            <select id="languageSelect">
+
+                <option value="en">
+                    English
+                </option>
+
+                <option value="no">
+                    Norsk
+                </option>
+
+                <option value="sv">
+                    Svenska
+                </option>
+
+                <option value="da">
+                    Dansk
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
 
     <!-- GitHub -->
-    <footer>
+    <div class="footer-center">
 
         <a
             href="https://github.com/LiamProsser77/gronnfalk"
@@ -92,26 +212,269 @@
                 ></path>
             </svg>
 
-            <span>Free and open source on GitHub</span>
+            <span id="githubText">
+                Free and open source on GitHub
+            </span>
 
         </a>
 
-    </footer>
+    </div>
 
-    <script>
-    document.getElementById("searchForm").addEventListener("submit", function(event) {
-        event.preventDefault();
+    <!-- Release -->
+    <div class="footer-right">
 
-        const query = document.getElementById("searchInput").value.trim();
+        <a
+            id="releaseLink"
+            class="release-link"
+            href="https://github.com/LiamProsser77/gronnfalk/releases"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Release: Loading...
+        </a>
 
-        if (!query) {
+    </div>
+
+</footer>
+
+<script>
+
+    const translationsEnglish = {
+        searchPlaceholder: "Search GronnFalk",
+        searchButton: "Search",
+        freeAndOpenSource: "Free and open source on GitHub"
+    };
+
+    const languageSelect =
+        document.getElementById("languageSelect");
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const githubText =
+        document.getElementById("githubText");
+
+    const releaseLink =
+        document.getElementById("releaseLink");
+
+    function getLanguage() {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        return params.get("lang") || "en";
+
+    }
+
+    function loadLanguage(language) {
+
+        if (language === "en") {
+
+            applyTranslations(
+                translationsEnglish
+            );
+
             return;
+
         }
 
-        window.location.href =
-            `results.html?q=${encodeURIComponent(query)}`;
-    });
+        const script =
+            document.createElement("script");
+
+        script.src =
+            "languages/" +
+            language +
+            ".js";
+
+        script.onload =
+            function() {
+
+                if (
+                    typeof translations !==
+                    "undefined"
+                ) {
+
+                    applyTranslations(
+                        translations
+                    );
+
+                }
+
+            };
+
+        script.onerror =
+            function() {
+
+                console.error(
+                    "Unable to load language:",
+                    language
+                );
+
+                applyTranslations(
+                    translationsEnglish
+                );
+
+            };
+
+        document.head.appendChild(
+            script
+        );
+
+    }
+
+    function applyTranslations(translations) {
+
+        if (
+            translations.searchPlaceholder
+        ) {
+
+            searchInput.placeholder =
+                translations.searchPlaceholder;
+
+            searchInput.setAttribute(
+                "aria-label",
+                translations.searchPlaceholder
+            );
+
+        }
+
+        if (
+            translations.freeAndOpenSource
+        ) {
+
+            githubText.textContent =
+                translations.freeAndOpenSource;
+
+        }
+
+    }
+
+    const currentLanguage =
+        getLanguage();
+
+    languageSelect.value =
+        currentLanguage;
+
+    loadLanguage(
+        currentLanguage
+    );
+
+    languageSelect.addEventListener(
+        "change",
+        function() {
+
+            const language =
+                languageSelect.value;
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            params.set(
+                "lang",
+                language
+            );
+
+            window.location.href =
+                "index.html?" +
+                params.toString();
+
+        }
+    );
+
+    document.getElementById(
+        "searchForm"
+    ).addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+            const query =
+                searchInput.value.trim();
+
+            if (!query) {
+                return;
+            }
+
+            const language =
+                languageSelect.value;
+
+            window.location.href =
+                `results.html?q=${encodeURIComponent(query)}&lang=${encodeURIComponent(language)}`;
+
+        }
+    );
+
+    async function loadLatestRelease() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "https://api.github.com/repos/LiamProsser77/gronnfalk/releases/latest",
+                    {
+                        headers: {
+                            "Accept":
+                                "application/vnd.github+json"
+                        }
+                    }
+                );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "GitHub API HTTP " +
+                    response.status
+                );
+
+            }
+
+            const release =
+                await response.json();
+
+            const version =
+                release.tag_name ||
+                release.name;
+
+            if (!version) {
+
+                throw new Error(
+                    "No release version found"
+                );
+
+            }
+
+            releaseLink.textContent =
+                "Release: " +
+                version;
+
+            if (release.html_url) {
+
+                releaseLink.href =
+                    release.html_url;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Unable to load latest release:",
+                error
+            );
+
+            releaseLink.textContent =
+                "Releases";
+
+        }
+
+    }
+
+    loadLatestRelease();
+
 </script>
 
-</body>
-</html>
+</body> </html>
