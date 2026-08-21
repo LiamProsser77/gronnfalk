@@ -3,25 +3,59 @@
 <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>GronnFalk</title>
+
 <meta
     name="description"
     content="GronnFalk — an open-source, privacy-focused metasearch engine."
 >
+
 <link rel="icon" type="image/png" href="favicon3.png">
 
 <link rel="stylesheet" href="style.css">
 
 <style>
+    .settings-button {
+        position: fixed;
+        top: 22px;
+        right: 25px;
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #ffffff;
+        cursor: pointer;
+        z-index: 10;
+        padding: 0;
+    }
+
+    .settings-button:hover {
+        background: #f5f5f5;
+    }
+
+    .settings-icon {
+        width: 22px;
+        height: 22px;
+        fill: none;
+        stroke: #333;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
     .footer-bar {
         position: fixed;
         bottom: 0;
-        left: 0;
-        right: 0;
+        left: 25px;
+        right: 25px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 12px 25px;
-        gap: 20px;
+        gap: 30px;
+        padding: 12px 0 18px;
+        z-index: 5;
     }
 
     .footer-left,
@@ -47,21 +81,23 @@
     .language-selector {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 9px;
         font-size: 14px;
     }
 
     .language-selector label {
-        color: #666;
+        color: #333;
+        font-weight: bold;
     }
 
     .language-selector select {
-        padding: 6px 10px;
+        padding: 7px 10px;
         border: 1px solid #ccc;
         border-radius: 6px;
-        background: #fff;
+        background: #ffffff;
         color: #222;
         font-size: 14px;
+        font-weight: 500;
         cursor: pointer;
     }
 
@@ -78,11 +114,17 @@
     }
 
     @media (max-width: 700px) {
+
+        .settings-button {
+            top: 15px;
+            right: 15px;
+        }
+
         .footer-bar {
             position: static;
+            margin: 30px 15px 0;
+            padding: 15px 0;
             flex-direction: column;
-            padding: 15px;
-            margin-top: 30px;
             gap: 12px;
         }
 
@@ -91,12 +133,40 @@
         .footer-right {
             justify-content: center;
         }
+
     }
 </style>
 
 </head>
 
 <body>
+
+<!-- Settings -->
+<button
+    class="settings-button"
+    id="settingsButton"
+    type="button"
+    aria-label="Settings"
+    title="Settings"
+>
+
+    <svg
+        class="settings-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+    >
+
+        <path
+            d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
+        ></path>
+
+        <path
+            d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.4 15a1.7 1.7 0 0 0-1.56-1.04H6.6v-2.4h.24A1.7 1.7 0 0 0 8.4 10a1.7 1.7 0 0 0-.34-1.88L8 8.06l1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56V5h2.4v.2a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.04h.24v2.4h-.24A1.7 1.7 0 0 0 19.4 15Z"
+        ></path>
+
+    </svg>
+
+</button>
 
 <!-- Corner decorations -->
 <div class="corner corner-top-left"></div>
@@ -111,10 +181,14 @@
         src="gronnfalk1.png"
         alt="GronnFalk"
         class="logo"
+        id="logoImage"
     >
 
     <!-- Search -->
-    <form class="search-form" id="searchForm">
+    <form
+        class="search-form"
+        id="searchForm"
+    >
 
         <div class="search-box">
 
@@ -129,12 +203,15 @@
 
             <button
                 type="submit"
+                id="searchButton"
                 aria-label="Search"
             >
+
                 <svg
                     viewBox="0 0 24 24"
                     aria-hidden="true"
                 >
+
                     <circle
                         cx="11"
                         cy="11"
@@ -147,7 +224,9 @@
                         x2="21"
                         y2="21"
                     ></line>
+
                 </svg>
+
             </button>
 
         </div>
@@ -164,7 +243,10 @@
 
         <div class="language-selector">
 
-            <label for="languageSelect">
+            <label
+                for="languageSelect"
+                id="languageLabel"
+            >
                 Languages
             </label>
 
@@ -207,9 +289,11 @@
                 viewBox="0 0 24 24"
                 aria-hidden="true"
             >
+
                 <path
                     d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55v-2.13c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.71 1.25 3.37.96.1-.75.4-1.25.73-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.08.78 2.18v3.24c0 .3.21.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
                 ></path>
+
             </svg>
 
             <span id="githubText">
@@ -239,23 +323,66 @@
 
 <script>
 
-    const translationsEnglish = {
-        searchPlaceholder: "Search GronnFalk",
-        searchButton: "Search",
-        freeAndOpenSource: "Free and open source on GitHub"
+    const defaultTranslations = {
+
+        languageLabel: "Languages",
+
+        searchPlaceholder:
+            "Search GronnFalk",
+
+        searchButton:
+            "Search",
+
+        searchAriaLabel:
+            "Search",
+
+        settings:
+            "Settings",
+
+        freeAndOpenSource:
+            "Free and open source on GitHub",
+
+        release:
+            "Release"
+
     };
 
+
     const languageSelect =
-        document.getElementById("languageSelect");
+        document.getElementById(
+            "languageSelect"
+        );
+
+    const languageLabel =
+        document.getElementById(
+            "languageLabel"
+        );
 
     const searchInput =
-        document.getElementById("searchInput");
+        document.getElementById(
+            "searchInput"
+        );
+
+    const searchButton =
+        document.getElementById(
+            "searchButton"
+        );
+
+    const settingsButton =
+        document.getElementById(
+            "settingsButton"
+        );
 
     const githubText =
-        document.getElementById("githubText");
+        document.getElementById(
+            "githubText"
+        );
 
     const releaseLink =
-        document.getElementById("releaseLink");
+        document.getElementById(
+            "releaseLink"
+        );
+
 
     function getLanguage() {
 
@@ -264,29 +391,102 @@
                 window.location.search
             );
 
-        return params.get("lang") || "en";
+        return (
+            params.get("lang") ||
+            localStorage.getItem(
+                "gronnfalk-language"
+            ) ||
+            "en"
+        );
 
     }
+
+
+    function applyTranslations(t) {
+
+        const translations =
+            Object.assign(
+                {},
+                defaultTranslations,
+                t || {}
+            );
+
+
+        languageLabel.textContent =
+            translations.languageLabel;
+
+
+        searchInput.placeholder =
+            translations.searchPlaceholder;
+
+
+        searchInput.setAttribute(
+            "aria-label",
+            translations.searchPlaceholder
+        );
+
+
+        searchButton.setAttribute(
+            "aria-label",
+            translations.searchAriaLabel
+        );
+
+
+        settingsButton.setAttribute(
+            "aria-label",
+            translations.settings
+        );
+
+
+        settingsButton.setAttribute(
+            "title",
+            translations.settings
+        );
+
+
+        githubText.textContent =
+            translations.freeAndOpenSource;
+
+
+        const currentRelease =
+            releaseLink.dataset.version;
+
+        if (currentRelease) {
+
+            releaseLink.textContent =
+                translations.release +
+                ": " +
+                currentRelease;
+
+        }
+
+    }
+
 
     function loadLanguage(language) {
 
         if (language === "en") {
 
             applyTranslations(
-                translationsEnglish
+                defaultTranslations
             );
 
             return;
 
         }
 
+
         const script =
-            document.createElement("script");
+            document.createElement(
+                "script"
+            );
+
 
         script.src =
             "languages/" +
             language +
             ".js";
+
 
         script.onload =
             function() {
@@ -300,9 +500,16 @@
                         translations
                     );
 
+                } else {
+
+                    applyTranslations(
+                        defaultTranslations
+                    );
+
                 }
 
             };
+
 
         script.onerror =
             function() {
@@ -313,10 +520,11 @@
                 );
 
                 applyTranslations(
-                    translationsEnglish
+                    defaultTranslations
                 );
 
             };
+
 
         document.head.appendChild(
             script
@@ -324,42 +532,29 @@
 
     }
 
-    function applyTranslations(translations) {
 
-        if (
-            translations.searchPlaceholder
-        ) {
+    let currentLanguage =
+        getLanguage();
 
-            searchInput.placeholder =
-                translations.searchPlaceholder;
 
-            searchInput.setAttribute(
-                "aria-label",
-                translations.searchPlaceholder
-            );
+    if (
+        !["en", "no", "sv", "da"]
+            .includes(currentLanguage)
+    ) {
 
-        }
-
-        if (
-            translations.freeAndOpenSource
-        ) {
-
-            githubText.textContent =
-                translations.freeAndOpenSource;
-
-        }
+        currentLanguage = "en";
 
     }
 
-    const currentLanguage =
-        getLanguage();
 
     languageSelect.value =
         currentLanguage;
 
+
     loadLanguage(
         currentLanguage
     );
+
 
     languageSelect.addEventListener(
         "change",
@@ -368,15 +563,24 @@
             const language =
                 languageSelect.value;
 
+
+            localStorage.setItem(
+                "gronnfalk-language",
+                language
+            );
+
+
             const params =
                 new URLSearchParams(
                     window.location.search
                 );
 
+
             params.set(
                 "lang",
                 language
             );
+
 
             window.location.href =
                 "index.html?" +
@@ -384,6 +588,7 @@
 
         }
     );
+
 
     document.getElementById(
         "searchForm"
@@ -393,21 +598,38 @@
 
             event.preventDefault();
 
+
             const query =
                 searchInput.value.trim();
+
 
             if (!query) {
                 return;
             }
 
+
             const language =
                 languageSelect.value;
+
 
             window.location.href =
                 `results.html?q=${encodeURIComponent(query)}&lang=${encodeURIComponent(language)}`;
 
         }
     );
+
+
+    settingsButton.addEventListener(
+        "click",
+        function() {
+
+            console.log(
+                "GronnFalk settings"
+            );
+
+        }
+    );
+
 
     async function loadLatestRelease() {
 
@@ -424,6 +646,7 @@
                     }
                 );
 
+
             if (!response.ok) {
 
                 throw new Error(
@@ -433,12 +656,15 @@
 
             }
 
+
             const release =
                 await response.json();
+
 
             const version =
                 release.tag_name ||
                 release.name;
+
 
             if (!version) {
 
@@ -448,9 +674,58 @@
 
             }
 
-            releaseLink.textContent =
-                "Release: " +
+
+            releaseLink.dataset.version =
                 version;
+
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const language =
+                params.get("lang") ||
+                localStorage.getItem(
+                    "gronnfalk-language"
+                ) ||
+                "en";
+
+
+            let releaseWord =
+                "Release";
+
+
+            if (
+                language === "no"
+            ) {
+
+                releaseWord =
+                    "Utgivelse";
+
+            } else if (
+                language === "sv"
+            ) {
+
+                releaseWord =
+                    "Version";
+
+            } else if (
+                language === "da"
+            ) {
+
+                releaseWord =
+                    "Udgivelse";
+
+            }
+
+
+            releaseLink.textContent =
+                releaseWord +
+                ": " +
+                version;
+
 
             if (release.html_url) {
 
@@ -466,12 +741,14 @@
                 error
             );
 
+
             releaseLink.textContent =
                 "Releases";
 
         }
 
     }
+
 
     loadLatestRelease();
 
