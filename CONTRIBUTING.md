@@ -60,6 +60,14 @@ Please follow the [GronnFalk Code of Conduct](CODE_OF_CONDUCT.md).
 
 Be respectful, helpful, and constructive when working with other contributors.
 
+## AI Policy
+
+**GronnFalk does not use AI in its search engine.**
+
+All pull requests must disclose whether AI was used and, if so, which AI tool was used.
+
+**[Read our AI Policy](AI_POLICY.rst)**
+
 ## Thank You
 
 Every contribution helps GronnFalk improve.
