@@ -1,195 +1,345 @@
 <!DOCTYPE html>
 
-<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
 
-<title>GronnFalk Settings</title>
+<head>
 
-<link rel="icon" type="image/png" href="favicon3.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <title>GronnFalk Settings</title>
 
-    body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #ffffff;
-        color: #222;
-    }
+    <link rel="icon" type="image/png" href="favicon3.png">
 
-    .settings-page {
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 35px 25px 60px;
-    }
+    <style>
 
-    .logo-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 45px;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    .logo {
-        width: 210px;
-        height: auto;
-        display: block;
-    }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #ffffff;
+            color: #222;
+        }
 
-    .settings-title {
-        margin: 0 0 30px;
-        text-align: center;
-        font-size: 28px;
-    }
-
-    .settings-section {
-        border: 1px solid #e5e5e5;
-        border-radius: 10px;
-        padding: 22px;
-        margin-bottom: 20px;
-        background: #ffffff;
-    }
-
-    .settings-section h2 {
-        margin: 0 0 8px;
-        font-size: 20px;
-    }
-
-    .settings-section p {
-        margin: 0 0 18px;
-        color: #666;
-        line-height: 1.5;
-        font-size: 14px;
-    }
-
-    .language-options {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .language-option {
-        width: 100%;
-        padding: 13px 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #ffffff;
-        color: #222;
-        text-align: left;
-        font-family: inherit;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .language-option:hover {
-        border-color: #8ee000;
-    }
-
-    .language-option.active {
-        border-color: #8ee000;
-        background: #f7ffe9;
-    }
-
-    .back-button {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 11px 18px;
-        border-radius: 8px;
-        background: #8ee000;
-        color: #111;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .back-button:hover {
-        opacity: 0.9;
-    }
-
-    @media (max-width: 700px) {
         .settings-page {
-            padding: 25px 15px 45px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 35px 25px 60px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 45px;
         }
 
         .logo {
-            width: 175px;
+            width: 210px;
+            height: auto;
+            display: block;
         }
 
         .settings-title {
-            font-size: 24px;
+            margin: 0 0 30px;
+            text-align: center;
+            font-size: 28px;
         }
-    }
-</style>
+
+        .settings-section {
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 20px;
+            background: #ffffff;
+        }
+
+        .settings-section h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .settings-section p {
+            margin: 0 0 18px;
+            color: #666;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+       /* Search Engines */
+
+        .engine-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .engine-option {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #222;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .engine-option:hover {
+            border-color: #8ee000;
+        }
+
+        /* Toggle */
+
+        .toggle {
+            position: relative;
+            width: 46px;
+            height: 25px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #ccc;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle-slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 19px;
+            height: 19px;
+
+            left: 3px;
+            top: 3px;
+
+            background: #ffffff;
+            border-radius: 50%;
+
+            transition: 0.2s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: #8ee000;
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(21px);
+        }
+
+        /* Back button */
+
+        .back-button {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            background: #8ee000;
+            color: #111;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 700px) {
+
+            .settings-page {
+                padding: 25px 15px 45px;
+            }
+
+            .logo {
+                width: 175px;
+            }
+
+            .settings-title {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
 
 </head>
+
 
 <body>
 
 <main class="settings-page">
 
+
     <div class="logo-container">
+
         <img
             src="gronnfalk1.png"
             alt="GronnFalk"
             class="logo"
         >
+
     </div>
+
 
     <h1 class="settings-title">
         Settings
     </h1>
 
+
+    <!-- SEARCH ENGINES -->
+
     <section class="settings-section">
 
         <h2>
-            Language
+            Search Engines
         </h2>
 
         <p>
-            Choose the language you want GronnFalk to use.
+            Choose which search engines GronnFalk uses for search results.
         </p>
 
-        <div class="language-options">
 
-            <button
-                class="language-option"
-                data-language="en"
-                type="button"
-            >
-                English
-            </button>
+        <div class="engine-options">
 
-            <button
-                class="language-option"
-                data-language="no"
-                type="button"
-            >
-                Norsk
-            </button>
 
-            <button
-                class="language-option"
-                data-language="sv"
-                type="button"
-            >
-                Svenska
-            </button>
+            <div class="engine-option">
 
-            <button
-                class="language-option"
-                data-language="da"
-                type="button"
-            >
-                Dansk
-            </button>
+                <span>
+                    SearXNG
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="searxng"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="engine-option">
+
+                <span>
+                    Google
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="google"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="engine-option">
+
+                <span>
+                    DuckDuckGo
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="duckduckgo"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="engine-option">
+
+                <span>
+                    Brave
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="brave"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="engine-option">
+
+                <span>
+                    4get
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="4get"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
 
         </div>
 
     </section>
+
 
     <a
         href="index.html"
@@ -198,16 +348,26 @@
         Back to GronnFalk
     </a>
 
+
 </main>
 
+
 <script>
+
+
+    /* =========================
+       LANGUAGE SETTINGS
+       ========================= */
+
     const languageOptions =
         document.querySelectorAll(".language-option");
+
 
     function updateActiveLanguage() {
 
         const savedLanguage =
             localStorage.getItem("gronnfalk-language") || "en";
+
 
         languageOptions.forEach(function(option) {
 
@@ -215,14 +375,19 @@
                 option.dataset.language ===
                 savedLanguage
             ) {
+
                 option.classList.add("active");
+
             } else {
+
                 option.classList.remove("active");
+
             }
 
         });
 
     }
+
 
     languageOptions.forEach(function(option) {
 
@@ -231,10 +396,12 @@
             const language =
                 option.dataset.language;
 
+
             localStorage.setItem(
                 "gronnfalk-language",
                 language
             );
+
 
             updateActiveLanguage();
 
@@ -242,255 +409,136 @@
 
     });
 
-    updateActiveLanguage();
-</script>
 
-</body> </html>
-<!DOCTYPE html>
+    /* =========================
+       SEARCH ENGINE SETTINGS
+       ========================= */
 
-<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    const engineToggles =
+        document.querySelectorAll(".engine-toggle");
 
-<title>GronnFalk Settings</title>
 
-<link rel="icon" type="image/png" href="favicon3.png">
+    const defaultEngineSettings = {
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+        searxng: true,
 
-    body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #ffffff;
-        color: #222;
-    }
+        google: true,
 
-    .settings-page {
-        width: 100%;
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 35px 25px 60px;
-    }
+        duckduckgo: true,
 
-    .logo-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 45px;
-    }
+        brave: true,
 
-    .logo {
-        width: 210px;
-        height: auto;
-        display: block;
-    }
+        "4get": true
 
-    .settings-title {
-        margin: 0 0 30px;
-        text-align: center;
-        font-size: 28px;
-    }
+    };
 
-    .settings-section {
-        border: 1px solid #e5e5e5;
-        border-radius: 10px;
-        padding: 22px;
-        margin-bottom: 20px;
-        background: #ffffff;
-    }
 
-    .settings-section h2 {
-        margin: 0 0 8px;
-        font-size: 20px;
-    }
+    function getEngineSettings() {
 
-    .settings-section p {
-        margin: 0 0 18px;
-        color: #666;
-        line-height: 1.5;
-        font-size: 14px;
-    }
-
-    .language-options {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .language-option {
-        width: 100%;
-        padding: 13px 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background: #ffffff;
-        color: #222;
-        text-align: left;
-        font-family: inherit;
-        font-size: 15px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .language-option:hover {
-        border-color: #8ee000;
-    }
-
-    .language-option.active {
-        border-color: #8ee000;
-        background: #f7ffe9;
-    }
-
-    .back-button {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 11px 18px;
-        border-radius: 8px;
-        background: #8ee000;
-        color: #111;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .back-button:hover {
-        opacity: 0.9;
-    }
-
-    @media (max-width: 700px) {
-        .settings-page {
-            padding: 25px 15px 45px;
-        }
-
-        .logo {
-            width: 175px;
-        }
-
-        .settings-title {
-            font-size: 24px;
-        }
-    }
-</style>
-
-</head>
-
-<body>
-
-<main class="settings-page">
-
-    <div class="logo-container">
-        <img
-            src="gronnfalk1.png"
-            alt="GronnFalk"
-            class="logo"
-        >
-    </div>
-
-    <h1 class="settings-title">
-        Settings
-    </h1>
-
-    <section class="settings-section">
-
-        <h2>
-            Language
-        </h2>
-
-        <p>
-            Choose the language you want GronnFalk to use.
-        </p>
-
-        <div class="language-options">
-
-            <button
-                class="language-option"
-                data-language="en"
-                type="button"
-            >
-                English
-            </button>
-
-            <button
-                class="language-option"
-                data-language="no"
-                type="button"
-            >
-                Norsk
-            </button>
-
-            <button
-                class="language-option"
-                data-language="sv"
-                type="button"
-            >
-                Svenska
-            </button>
-
-            <button
-                class="language-option"
-                data-language="da"
-                type="button"
-            >
-                Dansk
-            </button>
-
-        </div>
-
-    </section>
-
-    <a
-        href="index.html"
-        class="back-button"
-    >
-        Back to GronnFalk
-    </a>
-
-</main>
-
-<script>
-    const languageOptions =
-        document.querySelectorAll(".language-option");
-
-    function updateActiveLanguage() {
-
-        const savedLanguage =
-            localStorage.getItem("gronnfalk-language") || "en";
-
-        languageOptions.forEach(function(option) {
-
-            if (
-                option.dataset.language ===
-                savedLanguage
-            ) {
-                option.classList.add("active");
-            } else {
-                option.classList.remove("active");
-            }
-
-        });
-
-    }
-
-    languageOptions.forEach(function(option) {
-
-        option.addEventListener("click", function() {
-
-            const language =
-                option.dataset.language;
-
-            localStorage.setItem(
-                "gronnfalk-language",
-                language
+        const saved =
+            localStorage.getItem(
+                "gronnfalk-search-engines"
             );
 
-            updateActiveLanguage();
+
+        if (!saved) {
+
+            return {
+                ...defaultEngineSettings
+            };
+
+        }
+
+
+        try {
+
+            const parsed =
+                JSON.parse(saved);
+
+
+            return {
+                ...defaultEngineSettings,
+                ...parsed
+            };
+
+        } catch (error) {
+
+            return {
+                ...defaultEngineSettings
+            };
+
+        }
+
+    }
+
+
+    function loadEngineSettings() {
+
+        const engines =
+            getEngineSettings();
+
+
+        engineToggles.forEach(function(toggle) {
+
+            const engine =
+                toggle.dataset.engine;
+
+
+            toggle.checked =
+                engines[engine] === true;
 
         });
+
+    }
+
+
+    function saveEngineSettings() {
+
+        const engines = {};
+
+
+        engineToggles.forEach(function(toggle) {
+
+            engines[
+                toggle.dataset.engine
+            ] = toggle.checked;
+
+        });
+
+
+        localStorage.setItem(
+
+            "gronnfalk-search-engines",
+
+            JSON.stringify(engines)
+
+        );
+
+    }
+
+
+    engineToggles.forEach(function(toggle) {
+
+        toggle.addEventListener(
+            "change",
+            saveEngineSettings
+        );
 
     });
 
+
+    /* =========================
+       START SETTINGS
+       ========================= */
+
     updateActiveLanguage();
+
+    loadEngineSettings();
+
 </script>
 
-</body> </html>
+
+</body>
+
+</html>
+
