@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # 1. Track Docker dependencies
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # 2. Track GitHub Actions updates (for workflows/CI)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
