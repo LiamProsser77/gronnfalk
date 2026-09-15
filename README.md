@@ -171,9 +171,14 @@ The name **GronnFalk** was inspired by Norwegian-style naming, giving the projec
 ### Why GronnFalk?
 You should use GronnFalk because the other metasearches make you pay for your own domain, hosting costs money, but on GronnFalk make your own free instance on Render or Railway with a piece of mind. Trust me I am a big fan of SearXNG, Whoogle, and 4get but it costs money to make your own domain. 
 
+### JSON
+To see JSON and crawl GronnFalk go to this page:
+<a href="https://gronnfalk-api-aijg.onrender.com/">JSON API</a>
+
 ### License 
 
-GronnFalk is licensed under the Apache License 2.0.
+GronnFalk is licensed under the Apache License 2.0,
+<a href="https://github.com/LiamProsser77/gronnfalk/blob/main/LICENSE">For more see here.</a>
 
 
 
