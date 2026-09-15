@@ -1,4 +1,4 @@
-const SEARXNG_API = "https://web-production-9dd30.up.railway.app";
+const SEARXNG_API = "https://gronnfalk-api-aijg.onrender.com/";
 
 const searchForm = document.querySelector(".search-form");
 const searchInput = document.querySelector(".search-box input");
