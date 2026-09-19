@@ -160,10 +160,14 @@ return results.filter(result => {
         return false;
     }
 
-    const key =
-        result.url
-            .trim()
-            .toLowerCase();
+    let key = result.url.trim();
+
+    try {
+        // Normalize the hostname without changing case-sensitive paths or queries.
+        key = new URL(key).href;
+    } catch {
+        // Keep malformed provider URLs comparable without failing the search.
+    }
 
     if (seen.has(key)) {
         return false;
