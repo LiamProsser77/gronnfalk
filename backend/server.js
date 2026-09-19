@@ -30,22 +30,30 @@ status: "ok"
 });
 });
 
-function fetchWithTimeout(url, timeout = 5000) {
+async function fetchJSONWithTimeout(url, timeout = 5000) {
 const controller = new AbortController();
 
 const timer = setTimeout(() => {
     controller.abort();
 }, timeout);
 
-return fetch(url, {
+try {
+const response = await fetch(url, {
     headers: {
         "User-Agent": "GronnFalk/1.0",
         "Accept": "application/json"
     },
     signal: controller.signal
-}).finally(() => {
-    clearTimeout(timer);
 });
+
+return {
+    ok: response.ok,
+    status: response.status,
+    data: response.ok ? await response.json() : null
+};
+} finally {
+    clearTimeout(timer);
+}
 
 }
 
@@ -69,7 +77,7 @@ const params = new URLSearchParams();
         params.toString();
 
     const response =
-        await fetchWithTimeout(url);
+        await fetchJSONWithTimeout(url);
 
     if (!response.ok) {
         console.error(
@@ -81,7 +89,7 @@ const params = new URLSearchParams();
     }
 
     const data =
-        await response.json();
+        response.data;
 
     return (data.results || []).map(result => ({
         ...result,
@@ -112,7 +120,7 @@ try {
         encodeURIComponent(query);
 
     const response =
-        await fetchWithTimeout(url);
+        await fetchJSONWithTimeout(url);
 
     if (!response.ok) {
         console.error(
@@ -124,7 +132,7 @@ try {
     }
 
     const data =
-        await response.json();
+        response.data;
 
     return (data.web || []).map(result => ({
         title: result.title || "",
@@ -274,7 +282,7 @@ try {
         wikipediaTitle;
 
     const response =
-        await fetchWithTimeout(
+        await fetchJSONWithTimeout(
             url,
             4000
         );
@@ -286,7 +294,7 @@ try {
     }
 
     const data =
-        await response.json();
+        response.data;
 
     if (!data || !data.extract) {
         return res.json({
