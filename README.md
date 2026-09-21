@@ -151,6 +151,18 @@ The project is developed publicly on GitHub, where the community can explore the
 
 **A search engine born from an unlikely inspiration.**
 
+## What GronnFalk is not
+
+<ul>
+
+<li>GronnFalk is not a fork of SearXNG</li>
+
+<li>GronnFalk does not track its users</li>
+
+<li>GronnFalk does not have its own index, GronnFalk is a metasearch engine</li>
+</ul>
+
+
 ## Pronunciation
 
 ### GronnFalk
