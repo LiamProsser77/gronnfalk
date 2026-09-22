@@ -151,6 +151,13 @@ The project is developed publicly on GitHub, where the community can explore the
 
 **A search engine born from an unlikely inspiration.**
 
+## Community
+
+Need help or want to connect? Join the GronnFalk community:
+
+- [#gronnfalk:matrix.org](https://app.element.io/#/room/#gronnfalk:matrix.org)
+
+
 ## What GronnFalk is not
 
 <ul>
