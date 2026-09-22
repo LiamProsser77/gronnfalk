@@ -164,11 +164,15 @@ const seen = new Set();
 
 return results.filter(result => {
 
-    if (!result.url) {
+    if (!result || typeof result.url !== "string") {
         return false;
     }
 
     let key = result.url.trim();
+
+    if (!key) {
+        return false;
+    }
 
     try {
         // Normalize the hostname without changing case-sensitive paths or queries.

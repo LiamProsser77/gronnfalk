@@ -5,7 +5,8 @@ const vm = require("node:vm");
 const test = require("node:test");
 
 // Load the backend without opening a port or contacting search providers.
-const app = { use() {}, get() {}, listen() {} };
+const routes = new Map();
+const app = { use() {}, get(route, handler) { routes.set(route, handler); }, listen() {} };
 const express = () => app;
 express.json = () => {};
 const context = vm.createContext({
@@ -15,7 +16,11 @@ const context = vm.createContext({
     },
     process: { env: {} },
     URL,
-    console
+    URLSearchParams,
+    AbortController,
+    setTimeout,
+    clearTimeout,
+    console: { error() {} }
 });
 vm.runInContext(
     fs.readFileSync(path.join(__dirname, "../backend/server.js"), "utf8"),
@@ -43,4 +48,33 @@ test("deduplicates hostname case and whitespace, retaining the first result", ()
 test("skips missing URLs and handles malformed URLs without throwing", () => {
     const malformed = { url: "not a URL" };
     assert.deepEqual(removeDuplicates([{}, { url: "" }, malformed, malformed]), [malformed]);
+});
+
+test("skips non-string and blank URLs while retaining valid results", () => {
+    const first = { url: "https://example.com/first" };
+    const second = { url: "https://example.com/second" };
+    const invalid = [null, undefined, {}, { url: null }, { url: 42 },
+        { url: true }, { url: {} }, { url: [] }, { url: " \t\n " }];
+    assert.deepEqual(removeDuplicates([first, ...invalid, second, first]), [first, second]);
+});
+
+test("search returns valid results from both providers despite a non-string URL", async () => {
+    context.fetch = async url => ({
+        ok: true,
+        status: 200,
+        json: async () => url.includes("searx")
+            ? { results: [{ url: 42 }, { url: "https://example.com/searx" }] }
+            : { web: [{ url: "https://example.com/4get" }] }
+    });
+    let status = 200;
+    let body;
+    await routes.get("/search")({ query: { q: "example" } }, {
+        status(code) { status = code; return this; },
+        json(data) { body = data; }
+    });
+    assert.equal(status, 200);
+    assert.deepEqual(Array.from(body.results, result => result.url), [
+        "https://example.com/searx",
+        "https://example.com/4get"
+    ]);
 });
