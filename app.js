@@ -290,9 +290,9 @@ async function searchSearXNG() {
 
         params.set("category", currentCategory);
 
-const response = await fetch(
-    `${SEARXNG_API}/search?${params.toString()}`
-);
+        const searchURL = new URL("/search", SEARXNG_API);
+        searchURL.search = params.toString();
+        const response = await fetch(searchURL.href);
 
         if (!response.ok) {
             throw new Error(
