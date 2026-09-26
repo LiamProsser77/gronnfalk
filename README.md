@@ -194,7 +194,9 @@ To see JSON and crawl GronnFalk go to this page:
 <a href="https://gronnfalk-api-aijg.onrender.com/">JSON API</a>
 
 ### License 
-<img src="1.png" alt="GronnFalk" width="200">
+<a href="https://www.apache.org/licenses/LICENSE-2.0.html">
+  <img src="1.png" alt="GronnFalk" width="200">
+</a>
 
 GronnFalk is licensed under the Apache License 2.0,
 <a href="https://github.com/LiamProsser77/gronnfalk/blob/main/LICENSE">For more see here.</a>
