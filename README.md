@@ -155,8 +155,7 @@ The project is developed publicly on GitHub, where the community can explore the
 
 Need help or want to connect? Join the GronnFalk community:
 
-- [#gronnfalk:matrix.org](https://app.element.io/#/room/#gronnfalk:matrix.org)
-
+<table align="center"><tr><td><a href="https://app.element.io/#/room/#gronnfalk:matrix.org"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Element_(software)_logo_(2024).svg" width="48" height="48" alt="Element"></a></td><td align="center">&nbsp;&nbsp;&nbsp;&nbsp;<strong>Matrix</strong>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></table>
 
 ## What GronnFalk is not
 
