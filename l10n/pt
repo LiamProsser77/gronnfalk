@@ -1,194 +1,197 @@
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 3000;
-const SEARXNG_API = 'https://searx-ie07.onrender.com/';
-const FOURGET_API = 'https://search.yonderly.org/api/v1/web';
-const WIKIPEDIA_API = 'https://en.wikipedia.org/api/rest_v1/page/summary/';
-app.use(express.json());
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
-app.get('/', (req, res) => {
-    res.json({
-        name: 'GronnFalk API',
-        status: 'online',
-    });
-});
-app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'ok',
-    });
-});
-async function fetchJSONWithTimeout(url, timeout = 5000) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => {
-        controller.abort();
-    }, timeout);
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'GronnFalk/1.0',
-                'Accept': 'application/json',
-            },
-            signal: controller.signal,
-        });
-        return {
-            ok: response.ok,
-            status: response.status,
-            data: response.ok ? await response.json() : null,
-        };
-    } finally {
-        clearTimeout(timer);
-    }
-}
-async function searchSearXNG(query, category) {
-    try {
-        const params = new URLSearchParams();
-        params.set('q', query);
-        params.set('format', 'json');
-        if (category === 'images' || category === 'news') {
-            params.set('categories', category);
-        }
-        const url = SEARXNG_API + '/search?' + params.toString();
-        const response = await fetchJSONWithTimeout(url);
-        if (!response.ok) {
-            console.error('SearXNG failed:', response.status);
-            return [];
-        }
-        const data = response.data;
-        return (data.results || []).map((result) => ({
-            ...result,
-            source: 'SearXNG',
-        }));
-    } catch (error) {
-        console.error('SearXNG error:', error.message);
-        return [];
-    }
-}
-async function search4get(query, category) {
-    if (category !== 'general') {
-        return [];
-    }
-    try {
-        const url = FOURGET_API + '?s=' + encodeURIComponent(query);
-        const response = await fetchJSONWithTimeout(url);
-        if (!response.ok) {
-            console.error('4get failed:', response.status);
-            return [];
-        }
-        const data = response.data;
-        return (data.web || []).map((result) => ({
-            title: result.title || '',
-            url: result.url || '',
-            content: result.description || result.content || '',
-            description: result.description || result.content || '',
-            source: '4get',
-        }));
-    } catch (error) {
-        console.error('4get error:', error.message);
-        return [];
-    }
-}
-function removeDuplicates(results) {
-    const seen = new Set();
-    return results.filter((result) => {
-        if (!result || typeof result.url !== 'string') {
-            return false;
-        }
-        let key = result.url.trim();
-        if (!key) {
-            return false;
-        }
-        try {
-            // Normalize the hostname without changing case-sensitive paths or queries.
-            key = new URL(key).href;
-        } catch {
-            // Keep malformed provider URLs comparable without failing the search.
-        }
-        if (seen.has(key)) {
-            return false;
-        }
-        seen.add(key);
-        return true;
-    });
-}
-app.get('/search', async (req, res) => {
-    const query = typeof req.query.q === 'string' ? req.query.q.trim() : '';
-    const category = req.query.category || 'general';
-    if (!query) {
-        return res.status(400).json({
-            error: 'Missing search query',
-        });
-    }
-    const started = Date.now();
-    try {
-        const [searxngResults, fourgetResults] = await Promise.all([
-            searchSearXNG(query, category),
-            search4get(query, category),
-        ]);
-        const results = removeDuplicates([...searxngResults, ...fourgetResults]);
-        res.json({
-            query: query,
-            category: category,
-            results: results,
-            sources: {
-                searxng: searxngResults.length,
-                fourget: fourgetResults.length,
-            },
-            responseTime: Date.now() - started,
-        });
-    } catch (error) {
-        console.error('Search error:', error);
-        res.status(500).json({
-            error: 'Unable to perform search',
-        });
-    }
-});
-app.get('/wikipedia', async (req, res) => {
-    const query = typeof req.query.q === 'string' ? req.query.q.trim() : '';
-    if (!query) {
-        return res.status(400).json({
-            found: false,
-            error: 'Missing search query',
-        });
-    }
-    try {
-        const wikipediaTitle = encodeURIComponent(query.replace(/\s+/g, '_'));
-        const url = WIKIPEDIA_API + wikipediaTitle;
-        const response = await fetchJSONWithTimeout(url, 4000);
-        if (!response.ok) {
-            return res.json({
-                found: false,
-            });
-        }
-        const data = response.data;
-        if (!data || !data.extract) {
-            return res.json({
-                found: false,
-            });
-        }
-        res.json({
-            found: true,
-            title: data.title || query,
-            description: data.description || '',
-            extract: data.extract || '',
-            thumbnail: data.thumbnail && data.thumbnail.source ? data.thumbnail.source : '',
-            url:
-                data.content_urls && data.content_urls.desktop && data.content_urls.desktop.page
-                    ? data.content_urls.desktop.page
-                    : '',
-        });
-    } catch (error) {
-        console.error('Wikipedia error:', error.message);
-        res.status(500).json({
-            found: false,
-            error: 'Wikipedia request failed',
-        });
-    }
-});
-app.listen(PORT, () => {
-    console.log('GronnFalk API running on port ' + PORT);
-});
+<a href="https://liamprosser77.github.io/gronnfalk/?q=">
+  <img
+    src="https://github.com/user-attachments/assets/cff7ab19-66cf-4a35-a67c-2268849c6e1b"
+    alt="GronnFalk"
+    width="512"
+  >
+</a>
+
+<p align="left">
+  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0" />
+  <img src="https://img.shields.io/badge/Privacy--first-yes-brightgreen.svg" alt="Privacy-first: yes" />
+  <img src="https://img.shields.io/github/last-commit/LiamProsser77/gronnfalk" alt="Last commit" />
+  <img src="https://img.shields.io/github/stars/LiamProsser77/gronnfalk" alt="GitHub stars" />
+</p>
+<p align="center"><strong>"The simple soap search"</strong><br/>
+
+GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
+
+<details><summary><strong>Search Engines crawled by GronnFalk</strong></summary>
+
+<a href="https://searx-ie07.onrender.com/">SearXNG</a>
+
+<a href="https://search.yonderly.org">4get</a>
+
+<a href="https://duckduckgo.com/">DuckDuckGo</a>
+
+<a href="https://search.brave.com/">Brave</a>
+
+<a href="https://google.com">Google</a>
+
+  </details>
+
+## Instances
+
+Make your own GronnFalk Instance at: <a href="https://github.com/LiamProsser77/gronnfalk-instances">Gronnfalk Instances</a></li>
+
+## Install
+
+<details><summary><strong>Installation Guide</strong></summary>
+
+<h3> Run GronnFalk with Docker</h3>
+
+<p><a href="https://hub.docker.com/repository/docker/liamprosser77/gronnfalk/general">
+    <img src="https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker&logoColor=white" alt="Docker Supported">
+  </a>
+</p>
+
+<p>
+  Run your own GronnFalk instance using Docker.
+</p>
+
+<h4>Requirements</h4>
+
+<ul>
+  <li>Docker</li>
+  <li>Docker Compose</li>
+  <li>The GronnFalk repository</li>
+</ul>
+
+<h4>Installation</h4>
+
+<p>Clone the GronnFalk repository:</p>
+
+<pre><code>git clone https://github.com/LiamProsser77/gronnfalk.git
+cd gronnfalk</code></pre>
+
+<p>Build and start GronnFalk:</p>
+
+<pre><code>docker compose up -d --build</code></pre>
+
+<p>
+  Once Docker finishes, open:
+</p>
+
+<pre><code>http://localhost:8080</code></pre>
+
+<p>Your own GronnFalk instance should now be running.</p>
+
+<h4>Stop GronnFalk</h4>
+
+<pre><code>docker compose down</code></pre>
+
+<h4>Update GronnFalk</h4>
+
+<pre><code>git pull
+docker compose up -d --build</code></pre>
+
+<h4>Docker Files</h4>
+
+<ul>
+  <li><code>Dockerfile</code> — Builds the GronnFalk Docker image.</li>
+  <li><code>docker-compose.yml</code> — Runs the GronnFalk container.</li>
+  <li><code>.dockerignore</code> — Excludes unnecessary files from the image.</li>
+</ul>
+
+</details>
+
+## Deploy
+
+<details><summary><strong>Deploy Guide</strong></summary>
+
+<h3> Deploy with Railway</h3>
+<a href="https://railway.com/">{-=a=-}</a>
+</p>
+
+Deploy your own GronnFalk instance with Railway.
+
+1. Open Railway.
+2. Select **Deploy from GitHub repo**.
+3. Choose **GronnFalk**.
+4. Click **Deploy**.
+
+Railway will automatically use the included `Dockerfile`.
+
+<h3> Deploy with Render</h3>
+
+<p><a href="https://render.com/deploy?repo=https://github.com/LiamProsser77/gronnfalk"> <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render"> </a> </p>
+
+<p> Deploy your own GronnFalk instance to Render directly from GitHub. </p>
+
+<h4>Requirements</h4>
+
+<ul> <li>A GitHub account</li> <li>A Render account</li> </ul>
+
+<h4>Installation</h4>
+
+<ol> <li>Click the <strong>Deploy to Render</strong> button above.</li> <li>Sign in to Render with your GitHub account.</li> <li>Review the GronnFalk deployment settings.</li> <li>Click <strong>Apply</strong> or <strong>Deploy</strong>.</li> <li>Wait for Render to build and start your GronnFalk instance.</li> </ol>
+
+<p> Once deployment is complete, Render will provide you with a URL for your own GronnFalk instance. </p>
+
+<h4>Render Files</h4>
+
+<ul> <li><code>render.yaml</code> — Configures the GronnFalk Render deployment.</li> </ul>
+
+ </details>
+
+## About GronnFalk
+
+GronnFalk was founded on **August 14, 2026**, from an unexpected source of inspiration: a bar of soap.
+
+A unique texture inside the soap closely resembled the shape of what would eventually become the GronnFalk logo. That small coincidence sparked the idea behind the project and marked the beginning of GronnFalk.
+
+Since then, GronnFalk has grown into a privacy-focused search engine built around **simplicity, privacy, and open development**.
+
+The project is developed publicly on GitHub, where the community can explore the code, report issues, suggest ideas, and contribute.
+
+**A search engine born from an unlikely inspiration.**
+
+## Community
+
+Need help or want to connect? Join the GronnFalk community:
+
+<table align="center"><tbody><tr><td><a href="https://app.element.io/#/room/#gronnfalk:matrix.org"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Element_(software)_logo_(2024).svg" width="48" height="48" alt="Element"></a></td><td align="center">&nbsp;&nbsp;&nbsp;&nbsp;<strong>Matrix</strong>&nbsp;&nbsp;&nbsp;&nbsp;</td></tr></tbody></table>
+
+## What GronnFalk is not
+
+<ul>
+
+<li>GronnFalk is not a fork of SearXNG</li>
+
+<li>GronnFalk does not track its users</li>
+
+<li>GronnFalk does not have its own index, GronnFalk is a metasearch engine</li>
+</ul>
+
+## Pronunciation
+
+### GronnFalk
+
+**English:** `/ˈɡrɒn.fɔːlk/` — **GRON-fawk**  
+**Norwegian:** `/ˈɡrʊn.fɑlk/` — **GROON-falk**
+
+**Simple pronunciation:** **GRON-falk**
+
+The name **GronnFalk** was inspired by Norwegian-style naming, giving the project its distinctive sound and character. In English it means **Green Falcon**.
+
+<details><summary><strong>Screenshots</strong></summary>
+
+<img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" /> <img width="562" height="230" alt="Screenshot2" src="https://github.com/user-attachments/assets/3de3928c-f487-4bd3-b315-a35b554007e8" /> <img width="562" height="230" alt="Screenshot1" src="https://github.com/user-attachments/assets/4f111c05-c901-4a4e-8210-7b7d80623dd1" />
+
+</details>
+
+### Why GronnFalk?
+
+You should use GronnFalk because the other metasearches make you pay for your own domain, hosting costs money, but on GronnFalk make your own free instance on Render or Railway with a piece of mind. Trust me I am a big fan of SearXNG, Whoogle, and 4get but it costs money to make your own domain.
+
+### JSON
+
+To see JSON and crawl GronnFalk go to this page: <a href="https://gronnfalk-api-aijg.onrender.com/">JSON API</a>
+
+### License
+
+<a href="https://www.apache.org/licenses/LICENSE-2.0.html">
+  <img src="1.png" alt="GronnFalk" width="200">
+</a>
+
+GronnFalk is licensed under the Apache License 2.0, <a href="https://github.com/LiamProsser77/gronnfalk/blob/main/LICENSE">For more see here.</a>
