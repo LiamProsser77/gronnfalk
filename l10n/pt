@@ -1,902 +1,689 @@
 <!DOCTYPE html>
 
-<html lang="pt"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="pt">
 
-<title>GronnFalk Search</title> <link rel="icon" type="image/png" href="favicon3.png">
+<head>
 
-<script src="theme.js"></script>
-<link rel="stylesheet" href="theme.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <title>GronnFalk Settings</title>
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-    }
+    <link rel="icon" type="image/png" href="favicon3.png">
 
-    .topbar {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 18px 30px;
-        border-bottom: 1px solid var(--border);
-    }
+    <script src="theme.js"></script>
+    <link rel="stylesheet" href="theme.css">
 
-    .logo {
-        font-size: 26px;
-        font-weight: bold;
-        color: var(--accent);
-        text-decoration: none;
-        white-space: nowrap;
-    }
+    <style>
 
-    .search-container {
-        flex: 1;
-        max-width: 750px;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    .search-form {
-        display: flex;
-        width: 100%;
-    }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
 
-    .search-input {
-        flex: 1;
-        padding: 13px 16px;
-        font-size: 16px;
-        border: 1px solid var(--border-strong);
-        border-right: none;
-        border-radius: 8px 0 0 8px;
-        outline: none;
-        background: var(--surface);
-        color: var(--text);
-    }
+        .settings-page {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 35px 25px 60px;
+        }
 
-    .search-input::placeholder {
-        color: var(--text-subtle);
-    }
-
-    .search-input:focus {
-        border-color: var(--accent);
-    }
-
-    .search-button {
-        padding: 0 22px;
-        border: none;
-        background: var(--accent);
-        color: var(--on-accent);
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 0 8px 8px 0;
-        cursor: pointer;
-    }
-
-    .search-button:hover {
-        opacity: 0.9;
-    }
-
-    .tabs {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 18px 25px 0;
-    }
-
-    .tabs a {
-        display: inline-block;
-        margin-right: 25px;
-        padding-bottom: 10px;
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 15px;
-    }
-
-    .tabs a.active {
-        color: var(--text-strong);
-        border-bottom: 2px solid var(--accent);
-        font-weight: bold;
-    }
-
-    .results {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 25px;
-    }
-
-    .wikipedia-box {
-        display: none;
-        margin-bottom: 30px;
-        padding: 20px;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        background: var(--surface);
-    }
-
-    .wikipedia-box.visible {
-        display: block;
-    }
-
-    .wikipedia-title {
-        margin: 0 0 10px;
-        font-size: 24px;
-        color: var(--text);
-    }
-
-    .wikipedia-label {
-        margin-bottom: 6px;
-        font-size: 13px;
-        font-weight: bold;
-        color: var(--text-muted);
-        text-transform: uppercase;
-    }
-
-    .wikipedia-content {
-        display: flex;
-        gap: 18px;
-        align-items: flex-start;
-    }
-
-    .wikipedia-image {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 8px;
-        flex-shrink: 0;
-    }
-
-    .wikipedia-description {
-        margin: 0 0 12px;
-        color: var(--text-muted);
-        line-height: 1.5;
-        font-size: 15px;
-    }
-
-    .wikipedia-link {
-        color: var(--link);
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .wikipedia-link:hover {
-        text-decoration: underline;
-    }
-
-    .result {
-        margin-bottom: 30px;
-    }
-
-    .result-url {
-        color: var(--text-muted);
-        font-size: 14px;
-        margin-bottom: 5px;
-        word-break: break-all;
-    }
-
-    .result-title {
-        font-size: 21px;
-        margin: 0 0 7px;
-    }
-
-    .result-title a {
-        color: var(--link);
-        text-decoration: none;
-    }
-
-    .result-title a:hover {
-        text-decoration: underline;
-    }
-
-    .result-description {
-        color: var(--text-muted);
-        line-height: 1.5;
-        font-size: 15px;
-    }
-
-    .result-source {
-        margin-top: 8px;
-        color: var(--text-subtle);
-        font-size: 13px;
-    }
-
-    .result-image {
-        display: block;
-        width: 180px;
-        max-height: 120px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 12px;
-    }
-
-    .status {
-        color: var(--text-muted);
-        padding: 20px 0;
-    }
-
-    .error {
-        color: var(--error);
-    }
-
-    @media (max-width: 700px) {
-        .topbar {
-            flex-direction: column;
-            align-items: stretch;
-            padding: 15px;
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 45px;
         }
 
         .logo {
+            width: 210px;
+            height: auto;
+            display: block;
+        }
+
+        .settings-title {
+            margin: 0 0 30px;
             text-align: center;
+            font-size: 28px;
         }
 
-        .search-container {
-            max-width: none;
+        .settings-section {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 20px;
+            background: var(--surface);
         }
 
-        .results,
-        .tabs {
-            padding-left: 15px;
-            padding-right: 15px;
+        .settings-section h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
         }
 
-        .wikipedia-content {
+        .settings-section p {
+            margin: 0 0 18px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+       /* Settings options */
+
+        .setting-options {
+            display: flex;
             flex-direction: column;
+            gap: 8px;
         }
 
-        .wikipedia-image {
-            width: 120px;
-            height: 120px;
+        .setting-option {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: bold;
         }
-    }
-</style>
+
+        .setting-option:hover {
+            border-color: var(--accent);
+        }
+
+        /* Theme picker (radio group) */
+
+        fieldset.theme-options {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            min-width: 0;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .theme-option {
+            cursor: pointer;
+        }
+
+        .theme-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .theme-option .theme-hint {
+            font-size: 13px;
+            font-weight: normal;
+            color: var(--text-muted);
+        }
+
+        .theme-option .theme-check {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            border: 2px solid var(--border-strong);
+            border-radius: 50%;
+        }
+
+        .theme-option:has(input:checked) {
+            border-color: var(--accent);
+            background: var(--surface-hover);
+        }
+
+        .theme-option:has(input:checked) .theme-check {
+            border-color: var(--accent);
+            background: radial-gradient(
+                var(--accent) 0 45%,
+                transparent 50%
+            );
+        }
+
+        .theme-option:has(input:focus-visible) {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Toggle */
+
+        .toggle {
+            position: relative;
+            width: 46px;
+            height: 25px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--toggle-off);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .toggle-slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 19px;
+            height: 19px;
+
+            left: 3px;
+            top: 3px;
+
+            background: var(--toggle-knob);
+            border-radius: 50%;
+
+            transition: 0.2s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: var(--accent);
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(21px);
+        }
+
+        .toggle input:focus-visible + .toggle-slider {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Back button */
+
+        .back-button {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            background: var(--accent);
+            color: var(--on-accent);
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-button:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 700px) {
+
+            .settings-page {
+                padding: 25px 15px 45px;
+            }
+
+            .logo {
+                width: 175px;
+            }
+
+            .settings-title {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-<header class="topbar">
+<main class="settings-page">
 
-<a href="index.html" class="logo">
-    GRONNFALK
-</a>
 
-<div class="search-container">
+    <div class="logo-container">
 
-<form class="search-form" id="searchForm">
+        <img
+            src="gronnfalk1.png"
+            alt="GronnFalk"
+            class="logo"
+        >
 
-    <input
-        type="text"
-        id="searchInput"
-        class="search-input"
-        placeholder="Search GronnFalk"
-        autocomplete="off"
-    >
-
-    <button
-        type="submit"
-        class="search-button"
-    >
-        Search
-    </button>
-
-</form>
-
-</div>
-
-</header>
-
-<nav class="tabs">
-
-<a id="webTab" class="active" href="#">
-    Web
-</a>
-
-<a id="imagesTab" href="#">
-    Images
-</a>
-
-<a id="newsTab" href="#">
-    News
-</a>
-
-</nav>
-
-<main class="results" id="results">
-
-<div
-    id="wikipediaBox"
-    class="wikipedia-box"
-></div>
-
-<div id="searchResults">
-
-    <div class="status">
-        Searching GronnFalk...
     </div>
 
-</div>
-```
+
+    <h1 class="settings-title">
+        Settings
+    </h1>
+
+
+    <!-- SEARCH ENGINES -->
+
+    <section class="settings-section">
+
+        <h2>
+            Search Engines
+        </h2>
+
+        <p>
+            Choose which search engines GronnFalk uses for search results.
+        </p>
+
+
+        <div class="setting-options">
+
+
+            <div class="setting-option">
+
+                <span>
+                    SearXNG
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="searxng"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting-option">
+
+                <span>
+                    Google
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="google"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting-option">
+
+                <span>
+                    DuckDuckGo
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="duckduckgo"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting-option">
+
+                <span>
+                    Brave
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="brave"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting-option">
+
+                <span>
+                    4get
+                </span>
+
+                <label class="toggle">
+
+                    <input
+                        type="checkbox"
+                        class="engine-toggle"
+                        data-engine="4get"
+                    >
+
+                    <span class="toggle-slider"></span>
+
+                </label>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <!-- THEME -->
+
+    <section class="settings-section">
+
+        <h2>
+            Theme
+        </h2>
+
+        <p>
+            Choose how GronnFalk looks. "System" follows your device setting.
+        </p>
+
+        <fieldset class="theme-options setting-options">
+
+            <legend class="visually-hidden">Theme</legend>
+
+            <label class="setting-option theme-option">
+                <span>
+                    System
+                    <span class="theme-hint">&middot; match device</span>
+                </span>
+                <input type="radio" name="theme" value="system">
+                <span class="theme-check" aria-hidden="true"></span>
+            </label>
+
+            <label class="setting-option theme-option">
+                <span>Light</span>
+                <input type="radio" name="theme" value="light">
+                <span class="theme-check" aria-hidden="true"></span>
+            </label>
+
+            <label class="setting-option theme-option">
+                <span>Dark</span>
+                <input type="radio" name="theme" value="dark">
+                <span class="theme-check" aria-hidden="true"></span>
+            </label>
+
+        </fieldset>
+
+    </section>
+
+
+    <a
+        href="index.html"
+        class="back-button"
+    >
+        Back to GronnFalk
+    </a>
+
 
 </main>
 
+
 <script>
 
-const API_URL =
-    "https://gronnfalk-api-aijg.onrender.com/search";
 
-const WIKIPEDIA_API =
-    "https://en.wikipedia.org/api/rest_v1/page/summary/";
+    /* =========================
+       LANGUAGE SETTINGS
+       ========================= */
 
-const searchInput =
-    document.getElementById("searchInput");
-
-const searchForm =
-    document.getElementById("searchForm");
-
-const resultsContainer =
-    document.getElementById("searchResults");
-
-const wikipediaBox =
-    document.getElementById("wikipediaBox");
-
-const webTab =
-    document.getElementById("webTab");
-
-const imagesTab =
-    document.getElementById("imagesTab");
-
-const newsTab =
-    document.getElementById("newsTab");
+    const languageOptions =
+        document.querySelectorAll(".language-option");
 
 
-function escapeHTML(value) {
+    function updateActiveLanguage() {
 
-    const div =
-        document.createElement("div");
-
-    div.textContent =
-        value === null || value === undefined
-            ? ""
-            : String(value);
-
-    return div.innerHTML;
-
-}
+        const savedLanguage =
+            localStorage.getItem("gronnfalk-language") || "en";
 
 
-function safeURL(value) {
+        languageOptions.forEach(function(option) {
 
-    if (!value) {
-        return "";
-    }
+            if (
+                option.dataset.language ===
+                savedLanguage
+            ) {
 
-    try {
+                option.classList.add("active");
 
-        const url =
-            new URL(value);
+            } else {
 
-        if (
-            url.protocol === "http:" ||
-            url.protocol === "https:"
-        ) {
+                option.classList.remove("active");
 
-            return url.href;
+            }
 
-        }
-
-    } catch (error) {
-
-        return "";
+        });
 
     }
 
-    return "";
 
-}
+    languageOptions.forEach(function(option) {
 
+        option.addEventListener("click", function() {
 
-function getParameters() {
-
-    return new URLSearchParams(
-        window.location.search
-    );
-
-}
+            const language =
+                option.dataset.language;
 
 
-function setActiveTab(category) {
-
-    webTab.classList.remove("active");
-    imagesTab.classList.remove("active");
-    newsTab.classList.remove("active");
-
-    if (category === "images") {
-
-        imagesTab.classList.add("active");
-
-    } else if (category === "news") {
-
-        newsTab.classList.add("active");
-
-    } else {
-
-        webTab.classList.add("active");
-
-    }
-
-}
-
-
-async function loadWikipedia(query) {
-
-    wikipediaBox.classList.remove("visible");
-    wikipediaBox.innerHTML = "";
-
-    if (!query) {
-        return;
-    }
-
-    try {
-
-        const title =
-            encodeURIComponent(
-                query.trim().replace(/\s+/g, "_")
+            localStorage.setItem(
+                "gronnfalk-language",
+                language
             );
 
-        const response =
-            await fetch(
-                WIKIPEDIA_API + title
+
+            updateActiveLanguage();
+
+        });
+
+    });
+
+
+    /* =========================
+       SEARCH ENGINE SETTINGS
+       ========================= */
+
+    const engineToggles =
+        document.querySelectorAll(".engine-toggle");
+
+
+    const defaultEngineSettings = {
+
+        searxng: true,
+
+        google: true,
+
+        duckduckgo: true,
+
+        brave: true,
+
+        "4get": true
+
+    };
+
+
+    function getEngineSettings() {
+
+        const saved =
+            localStorage.getItem(
+                "gronnfalk-search-engines"
             );
 
-        if (!response.ok) {
-            return;
-        }
 
-        const data =
-            await response.json();
+        if (!saved) {
 
-        if (
-            !data ||
-            !data.title ||
-            !data.extract
-        ) {
-
-            return;
+            return {
+                ...defaultEngineSettings
+            };
 
         }
 
-        const image =
-            data.thumbnail &&
-            data.thumbnail.source
-                ? safeURL(data.thumbnail.source)
-                : "";
 
-        const articleURL =
-            data.content_urls &&
-            data.content_urls.desktop &&
-            data.content_urls.desktop.page
-                ? safeURL(
-                    data.content_urls.desktop.page
-                  )
-                : "";
+        try {
 
-        let imageHTML = "";
+            const parsed =
+                JSON.parse(saved);
 
-        if (image) {
 
-            imageHTML =
-                '<img class="wikipedia-image" src="' +
-                escapeHTML(image) +
-                '" alt="' +
-                escapeHTML(data.title) +
-                '" loading="lazy">';
+            return {
+                ...defaultEngineSettings,
+                ...parsed
+            };
+
+        } catch (error) {
+
+            return {
+                ...defaultEngineSettings
+            };
 
         }
 
-        let linkHTML = "";
+    }
 
-        if (articleURL) {
 
-            linkHTML =
-                '<a class="wikipedia-link" href="' +
-                escapeHTML(articleURL) +
-                '" target="_blank" rel="noopener noreferrer">' +
-                'Read more on Wikipedia' +
-                '</a>';
+    function loadEngineSettings() {
 
-        }
+        const engines =
+            getEngineSettings();
 
-        wikipediaBox.innerHTML =
-            '<div class="wikipedia-label">' +
-                'Wikipedia' +
-            '</div>' +
 
-            '<h2 class="wikipedia-title">' +
-                escapeHTML(data.title) +
-            '</h2>' +
+        engineToggles.forEach(function(toggle) {
 
-            '<div class="wikipedia-content">' +
+            const engine =
+                toggle.dataset.engine;
 
-                imageHTML +
 
-                '<div>' +
+            toggle.checked =
+                engines[engine] === true;
 
-                    '<p class="wikipedia-description">' +
-                        escapeHTML(data.extract) +
-                    '</p>' +
+        });
 
-                    linkHTML +
+    }
 
-                '</div>' +
 
-            '</div>';
+    function saveEngineSettings() {
 
-        wikipediaBox.classList.add("visible");
+        const engines = {};
 
-    } catch (error) {
 
-        console.error(
-            "Wikipedia error:",
-            error
+        engineToggles.forEach(function(toggle) {
+
+            engines[
+                toggle.dataset.engine
+            ] = toggle.checked;
+
+        });
+
+
+        localStorage.setItem(
+
+            "gronnfalk-search-engines",
+
+            JSON.stringify(engines)
+
         );
 
     }
 
-}
 
+    engineToggles.forEach(function(toggle) {
 
-async function search(query, category) {
-
-    if (!query) {
-
-        wikipediaBox.classList.remove("visible");
-        wikipediaBox.innerHTML = "";
-
-        resultsContainer.innerHTML =
-            '<div class="status">' +
-            'Enter a search query.' +
-            '</div>';
-
-        return;
-
-    }
-
-    searchInput.value =
-        query;
-
-    setActiveTab(
-        category
-    );
-
-    resultsContainer.innerHTML =
-        '<div class="status">' +
-        'Searching GronnFalk...' +
-        '</div>';
-
-    if (category === "general") {
-
-        loadWikipedia(query);
-
-    } else {
-
-        wikipediaBox.classList.remove("visible");
-        wikipediaBox.innerHTML = "";
-
-    }
-
-    try {
-
-        const url =
-            API_URL +
-            "?q=" +
-            encodeURIComponent(query) +
-            "&category=" +
-            encodeURIComponent(category);
-
-        const response =
-            await fetch(
-                url,
-                {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json"
-                    }
-                }
-            );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " + response.status
-            );
-
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            !data ||
-            !Array.isArray(data.results)
-        ) {
-
-            throw new Error(
-                "Invalid API response"
-            );
-
-        }
-
-        displayResults(
-            data.results
-        );
-
-    } catch (error) {
-
-        console.error(
-            "GronnFalk search error:",
-            error
-        );
-
-        resultsContainer.innerHTML =
-            '<div class="status error">' +
-            'Unable to load search results.' +
-            '</div>';
-
-    }
-
-}
-
-
-function displayResults(results) {
-
-    if (
-        !results ||
-        !results.length
-    ) {
-
-        resultsContainer.innerHTML =
-            '<div class="status">' +
-            'No results found.' +
-            '</div>';
-
-        return;
-
-    }
-
-    resultsContainer.innerHTML = "";
-
-    results.forEach(result => {
-
-        if (!result) {
-            return;
-        }
-
-        const title =
-            result.title ||
-            "Untitled result";
-
-        const url =
-            safeURL(
-                result.url
-            );
-
-        const description =
-            result.content ||
-            result.description ||
-            "";
-
-        const source =
-            result.source ||
-            "GronnFalk";
-
-        const engine =
-            result.engine ||
-            "";
-
-        const image =
-            safeURL(
-                result.thumbnail ||
-                result.img_src ||
-                ""
-            );
-
-        const resultElement =
-            document.createElement(
-                "article"
-            );
-
-        resultElement.className =
-            "result";
-
-        let imageHTML = "";
-
-        if (image) {
-
-            imageHTML =
-                '<img class="result-image" src="' +
-                escapeHTML(image) +
-                '" alt="" loading="lazy">';
-
-        }
-
-        let titleHTML;
-
-        if (url) {
-
-            titleHTML =
-                '<a href="' +
-                escapeHTML(url) +
-                '" target="_blank" rel="noopener noreferrer">' +
-                escapeHTML(title) +
-                '</a>';
-
-        } else {
-
-            titleHTML =
-                escapeHTML(title);
-
-        }
-
-        let sourceText =
-            "Fetched from " +
-            escapeHTML(source);
-
-        if (engine) {
-
-            sourceText +=
-                " · " +
-                escapeHTML(engine);
-
-        }
-
-        resultElement.innerHTML =
-            imageHTML +
-
-            '<div class="result-url">' +
-                escapeHTML(url) +
-            '</div>' +
-
-            '<h2 class="result-title">' +
-                titleHTML +
-            '</h2>' +
-
-            '<div class="result-description">' +
-                escapeHTML(description) +
-            '</div>' +
-
-            '<div class="result-source">' +
-                sourceText +
-            '</div>';
-
-        resultsContainer.appendChild(
-            resultElement
+        toggle.addEventListener(
+            "change",
+            saveEngineSettings
         );
 
     });
 
-}
+    /* =========================
+       THEME SETTINGS
+       ========================= */
+
+    const themeRadios =
+        document.querySelectorAll('input[name="theme"]');
 
 
-searchForm.addEventListener(
-    "submit",
-    function(event) {
+    themeRadios.forEach(function(radio) {
 
-        event.preventDefault();
+        radio.checked =
+            radio.value === window.GronnFalkTheme.get();
 
-        const query =
-            searchInput.value.trim();
+        radio.addEventListener("change", function() {
 
-        if (!query) {
-            return;
-        }
+            window.GronnFalkTheme.set(radio.value);
 
-        const params =
-            new URLSearchParams();
+        });
 
-        params.set(
-            "q",
-            query
-        );
+    });
 
-        params.set(
-            "category",
-            "general"
-        );
+    // Keep the picker in sync if the theme is changed in another tab.
+    window.addEventListener("storage", function() {
 
-        window.location.href =
-            "results.html?" +
-            params.toString();
+        themeRadios.forEach(function(radio) {
 
-    }
-);
+            radio.checked =
+                radio.value === window.GronnFalkTheme.get();
+
+        });
+
+    });
 
 
-webTab.addEventListener(
-    "click",
-    function(event) {
 
-        event.preventDefault();
+    /* =========================
+       START SETTINGS
+       ========================= */
 
-        const query =
-            searchInput.value.trim();
-
-        if (!query) {
-            return;
-        }
-
-        window.location.href =
-            "results.html?q=" +
-            encodeURIComponent(query) +
-            "&category=general";
-
-    }
-);
-
-
-imagesTab.addEventListener(
-    "click",
-    function(event) {
-
-        event.preventDefault();
-
-        const query =
-            searchInput.value.trim();
-
-        if (!query) {
-            return;
-        }
-
-        window.location.href =
-            "results.html?q=" +
-            encodeURIComponent(query) +
-            "&category=images";
-
-    }
-);
-
-
-newsTab.addEventListener(
-    "click",
-    function(event) {
-
-        event.preventDefault();
-
-        const query =
-            searchInput.value.trim();
-
-        if (!query) {
-            return;
-        }
-
-        window.location.href =
-            "results.html?q=" +
-            encodeURIComponent(query) +
-            "&category=news";
-
-    }
-);
-
-
-const params =
-    getParameters();
-
-const initialQuery =
-    params.get("q") || "";
-
-const initialCategory =
-    params.get("category") ||
-    "general";
-
-
-search(
-    initialQuery,
-    initialCategory
-);
+    updateActiveLanguage();
+    loadEngineSettings();
 
 </script>
 
+
 </body>
+
 </html>
+
