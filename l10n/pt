@@ -1,555 +1,170 @@
 <!DOCTYPE html>
-
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>GronnFalk</title>
 
-<title>GronnFalk Images</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
 
-<meta
-    name="description"
-    content="Search images with GronnFalk."
->
+    <meta
+        name="description"
+        content="GronnFalk — an open-source, privacy-focused metasearch engine."
+    >
 
-<script src="theme.js"></script>
-<link rel="stylesheet" href="theme.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-    }
-
-    .topbar {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 18px 30px;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .logo {
-        font-size: 26px;
-        font-weight: bold;
-        color: var(--accent);
-        text-decoration: none;
-        white-space: nowrap;
-    }
-
-    .search-container {
-        flex: 1;
-        max-width: 750px;
-    }
-
-    .search-form {
-        display: flex;
-        width: 100%;
-    }
-
-    .search-input {
-        flex: 1;
-        padding: 13px 16px;
-        font-size: 16px;
-        border: 1px solid var(--border-strong);
-        border-right: none;
-        border-radius: 8px 0 0 8px;
-        outline: none;
-        background: var(--surface);
-        color: var(--text);
-    }
-
-    .search-input::placeholder {
-        color: var(--text-subtle);
-    }
-
-    .search-input:focus {
-        border-color: var(--accent);
-    }
-
-    .search-button {
-        padding: 0 22px;
-        border: none;
-        background: var(--accent);
-        color: var(--on-accent);
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 0 8px 8px 0;
-        cursor: pointer;
-    }
-
-    .tabs {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 18px 25px 0;
-    }
-
-    .tabs a {
-        display: inline-block;
-        margin-right: 25px;
-        padding-bottom: 10px;
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 15px;
-    }
-
-    .tabs a.active {
-        color: var(--text-strong);
-        border-bottom: 2px solid var(--accent);
-        font-weight: bold;
-    }
-
-    .images {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 25px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-
-    .image-result {
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        overflow: hidden;
-        background: var(--surface);
-    }
-
-    .image-result a {
-        color: inherit;
-        text-decoration: none;
-    }
-
-    .image-result img {
-        display: block;
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-        background: var(--surface-sunken);
-    }
-
-    .image-info {
-        padding: 12px;
-    }
-
-    .image-title {
-        font-size: 15px;
-        font-weight: bold;
-        margin-bottom: 6px;
-    }
-
-    .image-source {
-        font-size: 13px;
-        color: var(--text-muted);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .status {
-        grid-column: 1 / -1;
-        color: var(--text-muted);
-        padding: 20px 0;
-    }
-
-    .error {
-        color: var(--error);
-    }
-
-    @media (max-width: 700px) {
-
-        .topbar {
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
             flex-direction: column;
-            align-items: stretch;
-            padding: 15px;
+            align-items: center;
+            justify-content: center;
         }
 
         .logo {
-            text-align: center;
+            width: min(420px, 80vw);
+            height: auto;
+            margin-bottom: 35px;
         }
 
-        .search-container {
-            max-width: none;
+        .search-form {
+            width: min(650px, 90vw);
         }
 
-        .images,
-        .tabs {
-            padding-left: 15px;
-            padding-right: 15px;
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 2px solid var(--border-strong);
+            border-radius: 30px;
+            padding: 5px 10px 5px 20px;
+            background: var(--surface);
         }
 
-        .images {
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+        .search-box input {
+            flex: 1;
+            border: 0;
+            outline: none;
+            font-size: 18px;
+            padding: 12px 0;
+            background: transparent;
+            color: var(--text);
         }
-    }
-</style>
 
+        .search-box button {
+            border: 0;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 10px;
+        }
 
+        .search-box svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .github-link {
+            position: fixed;
+            bottom: 25px;
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+    </style>
 </head>
 
 <body>
 
+    <img
+        src="/gronnfalk1.png"
+        alt="GronnFalk"
+        class="logo"
+    >
 
-<header class="topbar">
+    <form class="search-form" id="searchForm">
 
-    <a href="index.html" class="logo">
-        GRONNFALK
-    </a>
-
-    <div class="search-container">
-
-        <form class="search-form" id="searchForm">
+        <div class="search-box">
 
             <input
                 type="search"
                 id="searchInput"
-                class="search-input"
-                placeholder="Search images"
+                name="q"
+                placeholder="Search GronnFalk"
                 autocomplete="off"
+                aria-label="Search GronnFalk"
             >
 
-            <button
-                type="submit"
-                class="search-button"
-            >
-                Search
+            <button type="submit" aria-label="Search">
+
+                <svg viewBox="0 0 24 24">
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
+
+                    <line
+                        x1="16.5"
+                        y1="16.5"
+                        x2="21"
+                        y2="21"
+                    ></line>
+                </svg>
+
             </button>
 
-        </form>
+        </div>
 
-    </div>
+    </form>
 
-</header>
-
-
-<nav class="tabs">
+    <div class="status" id="status"></div>
 
     <a
-        href="#"
-        id="webTab"
+        href="https://github.com/LiamProsser77/gronnfalk"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-link"
     >
-        Web
+        Free and open source on GitHub
     </a>
 
-    <a
-        href="#"
-        id="imagesTab"
-        class="active"
-    >
-        Images
-    </a>
-
-    <a
-        href="#"
-        id="newsTab"
-    >
-        News
-    </a>
-
-</nav>
-
-
-<main
-    class="images"
-    id="images"
->
-
-    <div class="status">
-        Searching images...
-    </div>
-
-</main>
-
-
-<script>
-
-    const API_URL =
-        "https://gronnfalk.dockhosting.dev/search";
-
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-
-    const searchForm =
-        document.getElementById("searchForm");
-
-
-    const imagesContainer =
-        document.getElementById("images");
-
-
-    function escapeHTML(text) {
-
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            text || "";
-
-        return div.innerHTML;
-    }
-
-
-    function getQuery() {
-
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
-
-        return params.get("q") || "";
-    }
-
-
-    async function searchImages(query) {
-
-        if (!query) {
-
-            imagesContainer.innerHTML =
-                '<div class="status">Enter a search query.</div>';
-
-            return;
-        }
-
-
-        searchInput.value =
-            query;
-
-
-        imagesContainer.innerHTML =
-            '<div class="status">Searching images...</div>';
-
-
-        try {
-
-            const url =
-                API_URL +
-                "?q=" +
-                encodeURIComponent(query) +
-                "&category=images";
-
-
-            const response =
-                await fetch(url);
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Search failed: " +
-                    response.status
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            displayImages(
-                data.results || []
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-
-            imagesContainer.innerHTML =
-                '<div class="status error">' +
-                'Unable to load image results.' +
-                '</div>';
-
-        }
-
-    }
-
-
-    function displayImages(results) {
-
-        const imageResults =
-            results.filter(
-                result => result.img_src
-            );
-
-
-        if (!imageResults.length) {
-
-            imagesContainer.innerHTML =
-                '<div class="status">No images found.</div>';
-
-            return;
-        }
-
-
-        imagesContainer.innerHTML =
-            "";
-
-
-        imageResults.forEach(result => {
-
-            const card =
-                document.createElement("article");
-
-            card.className =
-                "image-result";
-
-
-            const imageURL =
-                result.img_src;
-
-
-            const pageURL =
-                result.url || imageURL;
-
-
-            const title =
-                result.title || "Image";
-
-
-            let hostname = "";
-
-
-            try {
-
-                hostname =
-                    new URL(pageURL).hostname;
-
-            } catch {
-
-                hostname =
-                    pageURL;
-
-            }
-
-
-            card.innerHTML =
-                '<a href="' +
-                escapeHTML(pageURL) +
-                '" target="_blank" rel="noopener noreferrer">' +
-
-                    '<img src="' +
-                    escapeHTML(imageURL) +
-                    '" alt="' +
-                    escapeHTML(title) +
-                    '" loading="lazy" referrerpolicy="no-referrer">' +
-
-                    '<div class="image-info">' +
-
-                        '<div class="image-title">' +
-                            escapeHTML(title) +
-                        '</div>' +
-
-                        '<div class="image-source">' +
-                            escapeHTML(hostname) +
-                        '</div>' +
-
-                    '</div>' +
-
-                '</a>';
-
-
-            imagesContainer.appendChild(
-                card
-            );
-
-        });
-
-    }
-
-
-    searchForm.addEventListener(
-        "submit",
-        function(event) {
-
-            event.preventDefault();
-
-
-            const query =
-                searchInput.value.trim();
-
-
-            if (!query) {
-                return;
-            }
-
-
-            window.location.href =
-                "images.html?q=" +
-                encodeURIComponent(query);
-
-        }
-    );
-
-
-    document
-        .getElementById("webTab")
-        .addEventListener(
-            "click",
-            function(event) {
+    <script>
+        document
+            .getElementById("searchForm")
+            .addEventListener("submit", function(event) {
 
                 event.preventDefault();
 
-
                 const query =
-                    searchInput.value.trim();
+                    document.getElementById("searchInput").value.trim();
 
-
-                if (query) {
-
-                    window.location.href =
-                        "results.html?q=" +
-                        encodeURIComponent(query);
-
+                if (!query) {
+                    return;
                 }
 
-            }
-        );
-
-
-    document
-        .getElementById("newsTab")
-        .addEventListener(
-            "click",
-            function(event) {
-
-                event.preventDefault();
-
-
-                const query =
-                    searchInput.value.trim();
-
-
-                if (query) {
-
-                    window.location.href =
-                        "news.html?q=" +
-                        encodeURIComponent(query);
-
-                }
-
-            }
-        );
-
-
-    const query =
-        getQuery();
-
-
-    searchImages(query);
-
-</script>
+                window.location.href =
+                    `/results.html?q=${encodeURIComponent(query)}`;
+            });
+    </script>
 
 </body>
 </html>
