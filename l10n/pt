@@ -1,69 +1,47 @@
 /*
- * Shared design tokens for GronnFalk.
- *
- * Every token is a light-dark() pair, so the page follows the OS setting by
- * default and theme.js only has to pin `data-theme="light|dark"` on <html>
- * when the user picks an explicit theme.
- *
- * Light mode uses a soft off-white instead of pure #fff, and dark mode uses a
- * near-black instead of pure #000 with off-white text, to reduce glare and
- * halation. Accent/link colors are lighter and less saturated on dark.
+ * Theme preference: "system" (default), "light" or "dark".
+ * Load this synchronously in <head> so the theme is applied before first paint.
  */
-
-:root {
-    color-scheme: light dark;
-
-    --bg:             light-dark(#f6f6f3, #121413);
-    --surface:        light-dark(#fbfbf9, #1a1d1c);
-    --surface-sunken: light-dark(#ecece8, #0e100f);
-    --surface-hover:  light-dark(#ebebe6, #262a29);
-
-    --text:           light-dark(#202326, #e4e6e4);
-    --text-strong:    light-dark(#101214, #f0f2f0);
-    --text-muted:     light-dark(#575c62, #a6adaa);
-    --text-subtle:    light-dark(#6b7076, #8f9693);
-
-    --border:         light-dark(#dcdcd6, #323736);
-    --border-strong:  light-dark(#b9b9b2, #4a504e);
-
-    --link:           light-dark(#14609c, #7db8ea);
-    --error:          light-dark(#b00020, #ff9a8f);
-
-    --accent:         light-dark(#8ee000, #93d92b);
-    --accent-hover:   light-dark(#7fcc00, #a6e84a);
-    --on-accent:      #111111;
-    --corner:         light-dark(#7cfc00, #6fc21a);
-
-    --toggle-off:     light-dark(#bdbdb6, #444a48);
-    --toggle-knob:    light-dark(#ffffff, #f0f2f0);
-
-    --focus-ring:     light-dark(rgba(0, 0, 0, 0.08), rgba(147, 217, 43, 0.25));
-}
-
-:root[data-theme="light"] {
-    color-scheme: light;
-}
-
-:root[data-theme="dark"] {
-    color-scheme: dark;
-}
-
-/* Photos are easier on the eyes when slightly dimmed against a dark page. */
-:root[data-theme="dark"] .result-image,
-:root[data-theme="dark"] .wikipedia-image,
-:root[data-theme="dark"] .image-result img {
-    filter: brightness(0.88);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .result-image,
-    :root:not([data-theme="light"]) .wikipedia-image,
-    :root:not([data-theme="light"]) .image-result img {
-        filter: brightness(0.88);
+(function () {
+    var STORAGE_KEY = 'gronnfalk-theme';
+    var VALID = ['system', 'light', 'dark'];
+    var root = document.documentElement;
+    function getTheme() {
+        try {
+            var saved = localStorage.getItem(STORAGE_KEY);
+            return VALID.indexOf(saved) === -1 ? 'system' : saved;
+        } catch (error) {
+            return 'system';
+        }
     }
-}
+    function apply(theme) {
+        if (theme === 'system') {
+            root.removeAttribute('data-theme');
+        } else {
+            root.setAttribute('data-theme', theme);
+        }
+    }
+    function setTheme(theme) {
+        if (VALID.indexOf(theme) === -1) {
+            theme = 'system';
+        }
+        try {
+            localStorage.setItem(STORAGE_KEY, theme);
+        } catch (error) {
+            // Storage unavailable: the choice still applies to this page view.
+        }
+        apply(theme);
+    }
 
-body {
-    background: var(--bg);
-    color: var(--text);
-}
+    // Keep other open tabs in sync.
+    window.addEventListener('storage', function (event) {
+        if (event.key === STORAGE_KEY) {
+            apply(getTheme());
+        }
+    });
+    window.GronnFalkTheme = {
+        get: getTheme,
+        set: setTheme,
+    };
+    apply(getTheme());
+})();
