@@ -6,102 +6,111 @@
   >
 </a>
 
-<p align="left">
-  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0" />
-  <img src="https://img.shields.io/badge/Privacy--first-yes-brightgreen.svg" alt="Privacy-first: yes" />
-  <img src="https://img.shields.io/github/last-commit/LiamProsser77/gronnfalk" alt="Last commit" />
-  <img src="https://img.shields.io/github/stars/LiamProsser77/gronnfalk" alt="GitHub stars" />
-</p>
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+![Privacy-first: yes](https://img.shields.io/badge/Privacy--first-yes-brightgreen.svg)
+![Last commit](https://img.shields.io/github/last-commit/LiamProsser77/gronnfalk)
+![GitHub stars](https://img.shields.io/github/stars/LiamProsser77/gronnfalk)
+
 <p align="center"><strong>"The simple soap search"</strong><br/>
+</p>
 
 GronnFalk is an open-source, privacy-focused metasearch engine built for a simple and independent search experience.
 
 <details><summary><strong>Search Engines crawled by GronnFalk</strong></summary>
 
-<a href="https://searx-ie07.onrender.com/">SearXNG</a>
+[SearXNG](https://searx-ie07.onrender.com/)
 
-<a href="https://search.yonderly.org">4get</a>
+[4get](https://search.yonderly.org)
 
-<a href="https://duckduckgo.com/">DuckDuckGo</a>
+[DuckDuckGo](https://duckduckgo.com/)
 
-<a href="https://search.brave.com/">Brave</a>
+[Brave](https://search.brave.com/)
 
-<a href="https://google.com">Google</a>
+[Google](https://google.com)
 
   </details>
 
 ## Instances
 
-Make your own GronnFalk Instance at: <a href="https://github.com/LiamProsser77/gronnfalk-instances">Gronnfalk Instances</a></li>
+Make your own GronnFalk Instance at: [Gronnfalk Instances](https://github.com/LiamProsser77/gronnfalk-instances)
 
 ## Install
 
 <details><summary><strong>Installation Guide</strong></summary>
 
-<h3> Run GronnFalk with Docker</h3>
+### Run GronnFalk with Docker
 
-<p><a href="https://hub.docker.com/repository/docker/liamprosser77/gronnfalk/general">
-    <img src="https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker&logoColor=white" alt="Docker Supported">
-  </a>
-</p>
+[![Docker Supported](https://img.shields.io/badge/Docker-Supported-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/repository/docker/liamprosser77/gronnfalk/general)
 
-<p>
-  Run your own GronnFalk instance using Docker.
-</p>
+Run your own GronnFalk instance using Docker.
 
-<h4>Requirements</h4>
+#### Requirements
 
-<ul>
-  <li>Docker</li>
-  <li>Docker Compose</li>
-  <li>The GronnFalk repository</li>
-</ul>
+- Docker
+- Docker Compose
+- The GronnFalk repository
 
-<h4>Installation</h4>
+#### Installation
 
-<p>Clone the GronnFalk repository:</p>
+Clone the GronnFalk repository:
 
-<pre><code>git clone https://github.com/LiamProsser77/gronnfalk.git
-cd gronnfalk</code></pre>
+```
+git clone https://github.com/LiamProsser77/gronnfalk.git
+cd gronnfalk
+```
 
-<p>Build and start GronnFalk:</p>
+Build and start GronnFalk:
 
-<pre><code>docker compose up -d --build</code></pre>
+```
+docker compose up -d --build
+```
 
-<p>
-  Once Docker finishes, open:
-</p>
+Once Docker finishes, open:
 
-<pre><code>http://localhost:8080</code></pre>
+```
+http://localhost:8080
+```
 
-<p>Your own GronnFalk instance should now be running.</p>
+Your own GronnFalk instance should now be running.
 
-<h4>Stop GronnFalk</h4>
+#### Stop GronnFalk
 
-<pre><code>docker compose down</code></pre>
+```
+docker compose down
+```
 
-<h4>Update GronnFalk</h4>
+#### Update GronnFalk
 
-<pre><code>git pull
-docker compose up -d --build</code></pre>
+```
+git pull
+docker compose up -d --build
+```
 
-<h4>Docker Files</h4>
+#### Docker Files
 
-<ul>
-  <li><code>Dockerfile</code> — Builds the GronnFalk Docker image.</li>
-  <li><code>docker-compose.yml</code> — Runs the GronnFalk container.</li>
-  <li><code>.dockerignore</code> — Excludes unnecessary files from the image.</li>
-</ul>
+- `Dockerfile` — Builds the GronnFalk Docker image.
+- `docker-compose.yml` — Runs the GronnFalk container.
+- `.dockerignore` — Excludes unnecessary files from the image.
 
 </details>
+
+## Local Developer Instance
+
+- Run `npm install` to install dependencies
+- Run `npm start` to run the API
+- Run the front-end with any of the following static hosting options:
+  - `node render-server.js`
+  - `npx serve .`
+  - `python3 -m http.server 8080`
+- Browse to `localhost:8080`
 
 ## Deploy
 
 <details><summary><strong>Deploy Guide</strong></summary>
 
-<h3> Deploy with Railway</h3>
-<a href="https://railway.com/">{-=a=-}</a>
-</p>
+### Deploy with Railway
+
+[![Railway Supported](https://img.shields.io/badge/Railway-Supported-8B5CF6?logo=railway&logoColor=white)](https://railway.com/)
 
 Deploy your own GronnFalk instance with Railway.
 
@@ -112,27 +121,32 @@ Deploy your own GronnFalk instance with Railway.
 
 Railway will automatically use the included `Dockerfile`.
 
-<h3> Deploy with Render</h3>
+### Deploy with Render
 
-<p><a href="https://render.com/deploy?repo=https://github.com/LiamProsser77/gronnfalk"> <img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render"> </a> </p>
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/LiamProsser77/gronnfalk)
 
-<p> Deploy your own GronnFalk instance to Render directly from GitHub. </p>
+Deploy your own GronnFalk instance to Render directly from GitHub.
 
-<h4>Requirements</h4>
+#### Requirements
 
-<ul> <li>A GitHub account</li> <li>A Render account</li> </ul>
+- A GitHub account
+- A Render account
 
-<h4>Installation</h4>
+#### Installation
 
-<ol> <li>Click the <strong>Deploy to Render</strong> button above.</li> <li>Sign in to Render with your GitHub account.</li> <li>Review the GronnFalk deployment settings.</li> <li>Click <strong>Apply</strong> or <strong>Deploy</strong>.</li> <li>Wait for Render to build and start your GronnFalk instance.</li> </ol>
+1. Click the **Deploy to Render** button above.
+2. Sign in to Render with your GitHub account.
+3. Review the GronnFalk deployment settings.
+4. Click **Apply** or **Deploy**.
+5. Wait for Render to build and start your GronnFalk instance.
 
-<p> Once deployment is complete, Render will provide you with a URL for your own GronnFalk instance. </p>
+Once deployment is complete, Render will provide you with a URL for your own GronnFalk instance.
 
-<h4>Render Files</h4>
+#### Render Files
 
-<ul> <li><code>render.yaml</code> — Configures the GronnFalk Render deployment.</li> </ul>
+- `render.yaml` — Configures the GronnFalk Render deployment.
 
- </details>
+</details>
 
 ## About GronnFalk
 
@@ -154,14 +168,9 @@ Need help or want to connect? Join the GronnFalk community:
 
 ## What GronnFalk is not
 
-<ul>
-
-<li>GronnFalk is not a fork of SearXNG</li>
-
-<li>GronnFalk does not track its users</li>
-
-<li>GronnFalk does not have its own index, GronnFalk is a metasearch engine</li>
-</ul>
+- GronnFalk is not a fork of SearXNG
+- GronnFalk does not track its users
+- GronnFalk does not have its own index, GronnFalk is a metasearch engine
 
 ## Pronunciation
 
@@ -186,7 +195,8 @@ You should use GronnFalk because the other metasearches make you pay for your ow
 
 ### JSON
 
-To see JSON and crawl GronnFalk go to this page: <a href="https://gronnfalk-api-aijg.onrender.com/">JSON API</a>
+To see JSON and crawl GronnFalk go to this page:
+[JSON API](https://gronnfalk-api-aijg.onrender.com/)
 
 ### License
 
