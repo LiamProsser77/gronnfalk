@@ -1,170 +1,902 @@
 <!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>GronnFalk</title>
+<html lang="pt"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="/theme.js"></script>
-    <link rel="stylesheet" href="/theme.css">
+<title>GronnFalk Search</title> <link rel="icon" type="image/png" href="favicon3.png">
 
-    <meta
-        name="description"
-        content="GronnFalk — an open-source, privacy-focused metasearch engine."
-    >
+<script src="theme.js"></script>
+<link rel="stylesheet" href="theme.css">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    .topbar {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 18px 30px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+        font-size: 26px;
+        font-weight: bold;
+        color: var(--accent);
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .search-container {
+        flex: 1;
+        max-width: 750px;
+    }
+
+    .search-form {
+        display: flex;
+        width: 100%;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 13px 16px;
+        font-size: 16px;
+        border: 1px solid var(--border-strong);
+        border-right: none;
+        border-radius: 8px 0 0 8px;
+        outline: none;
+        background: var(--surface);
+        color: var(--text);
+    }
+
+    .search-input::placeholder {
+        color: var(--text-subtle);
+    }
+
+    .search-input:focus {
+        border-color: var(--accent);
+    }
+
+    .search-button {
+        padding: 0 22px;
+        border: none;
+        background: var(--accent);
+        color: var(--on-accent);
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 0 8px 8px 0;
+        cursor: pointer;
+    }
+
+    .search-button:hover {
+        opacity: 0.9;
+    }
+
+    .tabs {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 18px 25px 0;
+    }
+
+    .tabs a {
+        display: inline-block;
+        margin-right: 25px;
+        padding-bottom: 10px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 15px;
+    }
+
+    .tabs a.active {
+        color: var(--text-strong);
+        border-bottom: 2px solid var(--accent);
+        font-weight: bold;
+    }
+
+    .results {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 25px;
+    }
+
+    .wikipedia-box {
+        display: none;
+        margin-bottom: 30px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface);
+    }
+
+    .wikipedia-box.visible {
+        display: block;
+    }
+
+    .wikipedia-title {
+        margin: 0 0 10px;
+        font-size: 24px;
+        color: var(--text);
+    }
+
+    .wikipedia-label {
+        margin-bottom: 6px;
+        font-size: 13px;
+        font-weight: bold;
+        color: var(--text-muted);
+        text-transform: uppercase;
+    }
+
+    .wikipedia-content {
+        display: flex;
+        gap: 18px;
+        align-items: flex-start;
+    }
+
+    .wikipedia-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+    }
+
+    .wikipedia-description {
+        margin: 0 0 12px;
+        color: var(--text-muted);
+        line-height: 1.5;
+        font-size: 15px;
+    }
+
+    .wikipedia-link {
+        color: var(--link);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .wikipedia-link:hover {
+        text-decoration: underline;
+    }
+
+    .result {
+        margin-bottom: 30px;
+    }
+
+    .result-url {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 5px;
+        word-break: break-all;
+    }
+
+    .result-title {
+        font-size: 21px;
+        margin: 0 0 7px;
+    }
+
+    .result-title a {
+        color: var(--link);
+        text-decoration: none;
+    }
+
+    .result-title a:hover {
+        text-decoration: underline;
+    }
+
+    .result-description {
+        color: var(--text-muted);
+        line-height: 1.5;
+        font-size: 15px;
+    }
+
+    .result-source {
+        margin-top: 8px;
+        color: var(--text-subtle);
+        font-size: 13px;
+    }
+
+    .result-image {
+        display: block;
+        width: 180px;
+        max-height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 12px;
+    }
+
+    .status {
+        color: var(--text-muted);
+        padding: 20px 0;
+    }
+
+    .error {
+        color: var(--error);
+    }
+
+    @media (max-width: 700px) {
+        .topbar {
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            align-items: stretch;
+            padding: 15px;
         }
 
         .logo {
-            width: min(420px, 80vw);
-            height: auto;
-            margin-bottom: 35px;
+            text-align: center;
         }
 
-        .search-form {
-            width: min(650px, 90vw);
+        .search-container {
+            max-width: none;
         }
 
-        .search-box {
-            display: flex;
-            align-items: center;
-            border: 2px solid var(--border-strong);
-            border-radius: 30px;
-            padding: 5px 10px 5px 20px;
-            background: var(--surface);
+        .results,
+        .tabs {
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
-        .search-box input {
-            flex: 1;
-            border: 0;
-            outline: none;
-            font-size: 18px;
-            padding: 12px 0;
-            background: transparent;
-            color: var(--text);
+        .wikipedia-content {
+            flex-direction: column;
         }
 
-        .search-box button {
-            border: 0;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 10px;
+        .wikipedia-image {
+            width: 120px;
+            height: 120px;
         }
+    }
+</style>
 
-        .search-box svg {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-        }
-
-        .github-link {
-            position: fixed;
-            bottom: 25px;
-            text-decoration: none;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-        .status {
-            margin-top: 15px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-    </style>
 </head>
 
 <body>
 
-    <img
-        src="/gronnfalk1.png"
-        alt="GronnFalk"
-        class="logo"
+<header class="topbar">
+
+<a href="index.html" class="logo">
+    GRONNFALK
+</a>
+
+<div class="search-container">
+
+<form class="search-form" id="searchForm">
+
+    <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="Search GronnFalk"
+        autocomplete="off"
     >
 
-    <form class="search-form" id="searchForm">
-
-        <div class="search-box">
-
-            <input
-                type="search"
-                id="searchInput"
-                name="q"
-                placeholder="Search GronnFalk"
-                autocomplete="off"
-                aria-label="Search GronnFalk"
-            >
-
-            <button type="submit" aria-label="Search">
-
-                <svg viewBox="0 0 24 24">
-                    <circle
-                        cx="11"
-                        cy="11"
-                        r="7"
-                    ></circle>
-
-                    <line
-                        x1="16.5"
-                        y1="16.5"
-                        x2="21"
-                        y2="21"
-                    ></line>
-                </svg>
-
-            </button>
-
-        </div>
-
-    </form>
-
-    <div class="status" id="status"></div>
-
-    <a
-        href="https://github.com/LiamProsser77/gronnfalk"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-link"
+    <button
+        type="submit"
+        class="search-button"
     >
-        Free and open source on GitHub
-    </a>
+        Search
+    </button>
 
-    <script>
-        document
-            .getElementById("searchForm")
-            .addEventListener("submit", function(event) {
+</form>
 
-                event.preventDefault();
+</div>
 
-                const query =
-                    document.getElementById("searchInput").value.trim();
+</header>
 
-                if (!query) {
-                    return;
+<nav class="tabs">
+
+<a id="webTab" class="active" href="#">
+    Web
+</a>
+
+<a id="imagesTab" href="#">
+    Images
+</a>
+
+<a id="newsTab" href="#">
+    News
+</a>
+
+</nav>
+
+<main class="results" id="results">
+
+<div
+    id="wikipediaBox"
+    class="wikipedia-box"
+></div>
+
+<div id="searchResults">
+
+    <div class="status">
+        Searching GronnFalk...
+    </div>
+
+</div>
+```
+
+</main>
+
+<script>
+
+const API_URL =
+    "https://gronnfalk-api-aijg.onrender.com/search";
+
+const WIKIPEDIA_API =
+    "https://en.wikipedia.org/api/rest_v1/page/summary/";
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const searchForm =
+    document.getElementById("searchForm");
+
+const resultsContainer =
+    document.getElementById("searchResults");
+
+const wikipediaBox =
+    document.getElementById("wikipediaBox");
+
+const webTab =
+    document.getElementById("webTab");
+
+const imagesTab =
+    document.getElementById("imagesTab");
+
+const newsTab =
+    document.getElementById("newsTab");
+
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        value === null || value === undefined
+            ? ""
+            : String(value);
+
+    return div.innerHTML;
+
+}
+
+
+function safeURL(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    try {
+
+        const url =
+            new URL(value);
+
+        if (
+            url.protocol === "http:" ||
+            url.protocol === "https:"
+        ) {
+
+            return url.href;
+
+        }
+
+    } catch (error) {
+
+        return "";
+
+    }
+
+    return "";
+
+}
+
+
+function getParameters() {
+
+    return new URLSearchParams(
+        window.location.search
+    );
+
+}
+
+
+function setActiveTab(category) {
+
+    webTab.classList.remove("active");
+    imagesTab.classList.remove("active");
+    newsTab.classList.remove("active");
+
+    if (category === "images") {
+
+        imagesTab.classList.add("active");
+
+    } else if (category === "news") {
+
+        newsTab.classList.add("active");
+
+    } else {
+
+        webTab.classList.add("active");
+
+    }
+
+}
+
+
+async function loadWikipedia(query) {
+
+    wikipediaBox.classList.remove("visible");
+    wikipediaBox.innerHTML = "";
+
+    if (!query) {
+        return;
+    }
+
+    try {
+
+        const title =
+            encodeURIComponent(
+                query.trim().replace(/\s+/g, "_")
+            );
+
+        const response =
+            await fetch(
+                WIKIPEDIA_API + title
+            );
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        if (
+            !data ||
+            !data.title ||
+            !data.extract
+        ) {
+
+            return;
+
+        }
+
+        const image =
+            data.thumbnail &&
+            data.thumbnail.source
+                ? safeURL(data.thumbnail.source)
+                : "";
+
+        const articleURL =
+            data.content_urls &&
+            data.content_urls.desktop &&
+            data.content_urls.desktop.page
+                ? safeURL(
+                    data.content_urls.desktop.page
+                  )
+                : "";
+
+        let imageHTML = "";
+
+        if (image) {
+
+            imageHTML =
+                '<img class="wikipedia-image" src="' +
+                escapeHTML(image) +
+                '" alt="' +
+                escapeHTML(data.title) +
+                '" loading="lazy">';
+
+        }
+
+        let linkHTML = "";
+
+        if (articleURL) {
+
+            linkHTML =
+                '<a class="wikipedia-link" href="' +
+                escapeHTML(articleURL) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                'Read more on Wikipedia' +
+                '</a>';
+
+        }
+
+        wikipediaBox.innerHTML =
+            '<div class="wikipedia-label">' +
+                'Wikipedia' +
+            '</div>' +
+
+            '<h2 class="wikipedia-title">' +
+                escapeHTML(data.title) +
+            '</h2>' +
+
+            '<div class="wikipedia-content">' +
+
+                imageHTML +
+
+                '<div>' +
+
+                    '<p class="wikipedia-description">' +
+                        escapeHTML(data.extract) +
+                    '</p>' +
+
+                    linkHTML +
+
+                '</div>' +
+
+            '</div>';
+
+        wikipediaBox.classList.add("visible");
+
+    } catch (error) {
+
+        console.error(
+            "Wikipedia error:",
+            error
+        );
+
+    }
+
+}
+
+
+async function search(query, category) {
+
+    if (!query) {
+
+        wikipediaBox.classList.remove("visible");
+        wikipediaBox.innerHTML = "";
+
+        resultsContainer.innerHTML =
+            '<div class="status">' +
+            'Enter a search query.' +
+            '</div>';
+
+        return;
+
+    }
+
+    searchInput.value =
+        query;
+
+    setActiveTab(
+        category
+    );
+
+    resultsContainer.innerHTML =
+        '<div class="status">' +
+        'Searching GronnFalk...' +
+        '</div>';
+
+    if (category === "general") {
+
+        loadWikipedia(query);
+
+    } else {
+
+        wikipediaBox.classList.remove("visible");
+        wikipediaBox.innerHTML = "";
+
+    }
+
+    try {
+
+        const url =
+            API_URL +
+            "?q=" +
+            encodeURIComponent(query) +
+            "&category=" +
+            encodeURIComponent(category);
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    }
                 }
+            );
 
-                window.location.href =
-                    `/results.html?q=${encodeURIComponent(query)}`;
-            });
-    </script>
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        if (
+            !data ||
+            !Array.isArray(data.results)
+        ) {
+
+            throw new Error(
+                "Invalid API response"
+            );
+
+        }
+
+        displayResults(
+            data.results
+        );
+
+    } catch (error) {
+
+        console.error(
+            "GronnFalk search error:",
+            error
+        );
+
+        resultsContainer.innerHTML =
+            '<div class="status error">' +
+            'Unable to load search results.' +
+            '</div>';
+
+    }
+
+}
+
+
+function displayResults(results) {
+
+    if (
+        !results ||
+        !results.length
+    ) {
+
+        resultsContainer.innerHTML =
+            '<div class="status">' +
+            'No results found.' +
+            '</div>';
+
+        return;
+
+    }
+
+    resultsContainer.innerHTML = "";
+
+    results.forEach(result => {
+
+        if (!result) {
+            return;
+        }
+
+        const title =
+            result.title ||
+            "Untitled result";
+
+        const url =
+            safeURL(
+                result.url
+            );
+
+        const description =
+            result.content ||
+            result.description ||
+            "";
+
+        const source =
+            result.source ||
+            "GronnFalk";
+
+        const engine =
+            result.engine ||
+            "";
+
+        const image =
+            safeURL(
+                result.thumbnail ||
+                result.img_src ||
+                ""
+            );
+
+        const resultElement =
+            document.createElement(
+                "article"
+            );
+
+        resultElement.className =
+            "result";
+
+        let imageHTML = "";
+
+        if (image) {
+
+            imageHTML =
+                '<img class="result-image" src="' +
+                escapeHTML(image) +
+                '" alt="" loading="lazy">';
+
+        }
+
+        let titleHTML;
+
+        if (url) {
+
+            titleHTML =
+                '<a href="' +
+                escapeHTML(url) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                escapeHTML(title) +
+                '</a>';
+
+        } else {
+
+            titleHTML =
+                escapeHTML(title);
+
+        }
+
+        let sourceText =
+            "Fetched from " +
+            escapeHTML(source);
+
+        if (engine) {
+
+            sourceText +=
+                " · " +
+                escapeHTML(engine);
+
+        }
+
+        resultElement.innerHTML =
+            imageHTML +
+
+            '<div class="result-url">' +
+                escapeHTML(url) +
+            '</div>' +
+
+            '<h2 class="result-title">' +
+                titleHTML +
+            '</h2>' +
+
+            '<div class="result-description">' +
+                escapeHTML(description) +
+            '</div>' +
+
+            '<div class="result-source">' +
+                sourceText +
+            '</div>';
+
+        resultsContainer.appendChild(
+            resultElement
+        );
+
+    });
+
+}
+
+
+searchForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        const params =
+            new URLSearchParams();
+
+        params.set(
+            "q",
+            query
+        );
+
+        params.set(
+            "category",
+            "general"
+        );
+
+        window.location.href =
+            "results.html?" +
+            params.toString();
+
+    }
+);
+
+
+webTab.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        window.location.href =
+            "results.html?q=" +
+            encodeURIComponent(query) +
+            "&category=general";
+
+    }
+);
+
+
+imagesTab.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        window.location.href =
+            "results.html?q=" +
+            encodeURIComponent(query) +
+            "&category=images";
+
+    }
+);
+
+
+newsTab.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        const query =
+            searchInput.value.trim();
+
+        if (!query) {
+            return;
+        }
+
+        window.location.href =
+            "results.html?q=" +
+            encodeURIComponent(query) +
+            "&category=news";
+
+    }
+);
+
+
+const params =
+    getParameters();
+
+const initialQuery =
+    params.get("q") || "";
+
+const initialCategory =
+    params.get("category") ||
+    "general";
+
+
+search(
+    initialQuery,
+    initialCategory
+);
+
+</script>
 
 </body>
 </html>
