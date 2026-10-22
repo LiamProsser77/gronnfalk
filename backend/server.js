@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 const SEARXNG_API = "https://searx-ie07.onrender.com/";
 const FOURGET_API = "https://search.yonderly.org/api/v1/web";
+const DEGOOG_API = "https://degoog.org/api/search";
 const WIKIPEDIA_API = "https://en.wikipedia.org/api/rest_v1/page/summary/";
 
 app.use(express.json());
@@ -157,6 +158,42 @@ try {
     return [];
 }
 
+}
+async function searchDegoog(query, category) {
+    if (category !== "general") {
+        return [];
+    }
+
+    try {
+        const params = new URLSearchParams();
+        params.set("q", query);
+
+        const url = `${DEGOOG_API}?${params.toString()}`;
+
+        const response = await fetchJSONWithTimeout(url, 7000);
+
+        if (!response.ok) {
+            console.error("Degoog failed:", response.status);
+            return [];
+        }
+
+        const data = response.data;
+
+        return (data.results || [])
+            .filter(result => result && result.url)
+            .map(result => ({
+                ...result,
+                title: result.title || "",
+                url: result.url,
+                content: result.content || result.snippet || "",
+                description: result.snippet || result.content || "",
+                source: "Degoog"
+            }));
+
+    } catch (error) {
+        console.error("Degoog error:", error.message);
+        return [];
+    }
 }
 
 function removeDuplicates(results) {
