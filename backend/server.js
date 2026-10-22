@@ -250,35 +250,30 @@ const started = Date.now();
 try {
 
     const [
-        searxngResults,
-        fourgetResults
-    ] = await Promise.all([
-        searchSearXNG(
-            query,
-            category
-        ),
-        search4get(
-            query,
-            category
-        )
-    ]);
-
+    searxngResults,
+    fourgetResults,
+    degoogResults
+] = await Promise.all([
+    searchSearXNG(query, category),
+    search4get(query, category),
+    searchDegoog(query, category)
+]);
     const results =
-        removeDuplicates([
-            ...searxngResults,
-            ...fourgetResults
-        ]);
+    removeDuplicates([
+        ...searxngResults,
+        ...fourgetResults,
+        ...degoogResults
+    ]);
 
     res.json({
         query: query,
         category: category,
         results: results,
         sources: {
-            searxng:
-                searxngResults.length,
-            fourget:
-                fourgetResults.length
-        },
+    searxng: searxngResults.length,
+    fourget: fourgetResults.length,
+    degoog: degoogResults.length
+},
         responseTime:
             Date.now() - started
     });
