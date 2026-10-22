@@ -190,7 +190,7 @@ The name **GronnFalk** was inspired by Norwegian-style naming, giving the projec
 <details>
   <summary><strong>Screenshots</strong></summary>
 
-<img width="562" height="230" alt="Screenshot 2026-08-18 12 25 59 PM" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" /> <img width="562" height="230" alt="Screenshot2" src="https://github.com/user-attachments/assets/3de3928c-f487-4bd3-b315-a35b554007e8" /> <img width="562" height="230" alt="Screenshot1" src="https://github.com/user-attachments/assets/4f111c05-c901-4a4e-8210-7b7d80623dd1" />
+<img width="562" height="230" alt="gronnfalk3.png" src="https://github.com/user-attachments/assets/dd60ac41-34be-4d0e-88f4-cb054e533c82" /> <img width="562" height="230" alt="Screenshot2" src="https://github.com/user-attachments/assets/3de3928c-f487-4bd3-b315-a35b554007e8" /> <img width="562" height="230" alt="Screenshot1" src="https://github.com/user-attachments/assets/4f111c05-c901-4a4e-8210-7b7d80623dd1" /> <img width="562" height="300" alt="gronnfalk-screenshot" src="https://github.com/user-attachments/assets/449b0457-6c19-4424-b2e9-b052ecc2daaf"/>
 </details>
 
 ### But what about:
