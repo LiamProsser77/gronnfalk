@@ -30,6 +30,8 @@ GronnFalk is an open-source, privacy-focused metasearch engine built for a simpl
   
 [Google](https://google.com)
   
+[Degoog](https://degoog.org/)
+  
   </details>
 
 ## Instances
