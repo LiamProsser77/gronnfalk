@@ -97,8 +97,9 @@ docker compose up -d --build
 
 </details>
 
-## Local Developer Instance
-
+<details>
+  <summary><strong>Local Developer Instance</strong></summary>
+  
 - Run `npm install` to install dependencies
 - Run `npm start` to run the API
 - Run the front-end with any of the following static hosting options:
@@ -106,6 +107,8 @@ docker compose up -d --build
   - `npx serve .`
   - `python3 -m http.server 8080`
 - Browse to `localhost:8080`
+
+</details>
 
 
 ## Deploy
