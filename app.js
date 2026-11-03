@@ -1,4 +1,5 @@
 const SEARXNG_API = "https://gronnfalk-api-aijg.onrender.com/";
+const SEARCH_ENGINES = ["searxng", "4get", "degoog"];
 
 const searchForm = document.querySelector(".search-form");
 const searchInput = document.querySelector(".search-box input");
@@ -14,6 +15,22 @@ function getQueryFromURL() {
 function getCategoryFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get("category") || "general";
+}
+
+function getEnabledEngines() {
+    let saved = {};
+
+    try {
+        saved = JSON.parse(
+            localStorage.getItem("gronnfalk-search-engines")
+        ) || {};
+    } catch (error) {
+        saved = {};
+    }
+
+    return SEARCH_ENGINES.filter(function (engine) {
+        return saved[engine] !== false;
+    });
 }
 
 function escapeHTML(text) {
@@ -289,6 +306,7 @@ async function searchSearXNG() {
         }
 
         params.set("category", currentCategory);
+        params.set("engines", getEnabledEngines().join(","));
 
         const searchURL = new URL("/search", SEARXNG_API);
         searchURL.search = params.toString();

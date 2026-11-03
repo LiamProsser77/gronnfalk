@@ -9,6 +9,8 @@ const FOURGET_API = "https://search.yonderly.org/api/v1/web";
 const DEGOOG_API = "https://degoog.org/api/search";
 const WIKIPEDIA_API = "https://en.wikipedia.org/api/rest_v1/page/summary/";
 
+const SEARCH_ENGINES = ["searxng", "4get", "degoog"];
+
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -196,6 +198,18 @@ async function searchDegoog(query, category) {
     }
 }
 
+function getEnabledEngines(value) {
+    if (value === undefined) {
+        return SEARCH_ENGINES;
+    }
+
+    const requested = String(value)
+        .split(",")
+        .map(engine => engine.trim().toLowerCase());
+
+    return SEARCH_ENGINES.filter(engine => requested.includes(engine));
+}
+
 function removeDuplicates(results) {
 const seen = new Set();
 
@@ -245,6 +259,15 @@ if (!query) {
     });
 }
 
+const engines =
+    getEnabledEngines(req.query.engines);
+
+if (engines.length === 0) {
+    return res.status(400).json({
+        error: "No search engines enabled"
+    });
+}
+
 const started = Date.now();
 
 try {
@@ -254,9 +277,9 @@ try {
     fourgetResults,
     degoogResults
 ] = await Promise.all([
-    searchSearXNG(query, category),
-    search4get(query, category),
-    searchDegoog(query, category)
+    engines.includes("searxng") ? searchSearXNG(query, category) : [],
+    engines.includes("4get") ? search4get(query, category) : [],
+    engines.includes("degoog") ? searchDegoog(query, category) : []
 ]);
     const results =
     removeDuplicates([
