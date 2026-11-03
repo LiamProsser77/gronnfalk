@@ -330,6 +330,9 @@ const API_URL =
 const WIKIPEDIA_API =
     "https://en.wikipedia.org/api/rest_v1/page/summary/";
 
+const SEARCH_ENGINES =
+    ["searxng", "4get", "degoog"];
+
 const searchInput =
     document.getElementById("searchInput");
 
@@ -394,6 +397,32 @@ function safeURL(value) {
     }
 
     return "";
+
+}
+
+
+function getEnabledEngines() {
+
+    let saved = {};
+
+    try {
+
+        saved =
+            JSON.parse(
+                localStorage.getItem("gronnfalk-search-engines")
+            ) || {};
+
+    } catch (error) {
+
+        saved = {};
+
+    }
+
+    return SEARCH_ENGINES.filter(function(engine) {
+
+        return saved[engine] !== false;
+
+    });
 
 }
 
@@ -594,7 +623,9 @@ async function search(query, category) {
             "?q=" +
             encodeURIComponent(query) +
             "&category=" +
-            encodeURIComponent(category);
+            encodeURIComponent(category) +
+            "&engines=" +
+            encodeURIComponent(getEnabledEngines().join(","));
 
         const response =
             await fetch(
