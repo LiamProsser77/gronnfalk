@@ -1,5 +1,5 @@
 const SEARXNG_API = "https://gronnfalk-api-aijg.onrender.com/";
-const SEARCH_ENGINES = ["searxng", "4get", "degoog"];
+const SEARCH_ENGINES = ["searxng", "4get", "degoog", "mwmbl"];
 
 const searchForm = document.querySelector(".search-form");
 const searchInput = document.querySelector(".search-box input");
