@@ -54,6 +54,11 @@ async function runBackendSearch(engines) {
         const host = new URL(url).hostname;
         hosts.push(host);
         const result = { title: host, url: `https://example.com/${host}` };
+        if (host === "api.mwmbl.org") {
+            // Mwmbl answers with a bare list and splits text into bold/plain segments.
+            const segments = [{ value: host, is_bold: false }];
+            return { ok: true, status: 200, json: async () => [{ ...result, title: segments, extract: segments }] };
+        }
         return { ok: true, status: 200, json: async () => ({ results: [result], web: [result] }) };
     });
     const response = {
@@ -88,12 +93,12 @@ test("frontend sends every engine when settings are missing or invalid", async (
         const { context, requests } = loadFrontend({ getItem: () => saved });
         vm.runInContext(`currentQuery = "cats";`, context);
         await context.searchSearXNG();
-        assert.equal(requests.at(-1).searchParams.get("engines"), "searxng,4get,degoog");
+        assert.equal(requests.at(-1).searchParams.get("engines"), "searxng,4get,degoog,mwmbl");
     }
 });
 
 test("frontend sends only the engines enabled in settings", async () => {
-    const saved = { searxng: true, google: false, "4get": false, degoog: true };
+    const saved = { searxng: true, google: false, "4get": false, degoog: true, mwmbl: false };
     const { context, requests } = loadFrontend({
         getItem: key => key === "gronnfalk-search-engines" ? JSON.stringify(saved) : null
     });
@@ -105,8 +110,8 @@ test("frontend sends only the engines enabled in settings", async () => {
 test("backend queries every engine when no engines are given", async () => {
     const { hosts, response } = await runBackendSearch(undefined);
     assert.equal(response.statusCode, 200);
-    assert.deepEqual(hosts, ["degoog.org", "search.yonderly.org", "searx-ie07.onrender.com"]);
-    assert.equal(response.body.results.length, 3);
+    assert.deepEqual(hosts, ["api.mwmbl.org", "degoog.org", "search.yonderly.org", "searx-ie07.onrender.com"]);
+    assert.equal(response.body.results.length, 4);
 });
 
 test("backend queries only the given engines and ignores unknown names", async () => {
@@ -124,4 +129,64 @@ test("backend rejects searches with no enabled engines", async () => {
         assert.equal(response.body.error, "No search engines enabled");
         assert.equal(hosts.length, 0);
     }
+});
+
+test("backend maps Mwmbl text segments to plain title and content", async () => {
+    const search = loadBackendSearch(async url => {
+        const parsed = new URL(url);
+        assert.equal(parsed.hostname, "api.mwmbl.org");
+        assert.equal(parsed.searchParams.get("s"), "rust language");
+        return {
+            ok: true,
+            status: 200,
+            json: async () => [
+                {
+                    url: "https://rust-lang.org",
+                    title: [
+                        { value: "\n  ", is_bold: false },
+                        { value: "Rust", is_bold: true },
+                        { value: " Programming Language\n", is_bold: false }
+                    ],
+                    extract: [
+                        { value: "A ", is_bold: false },
+                        { value: "language", is_bold: true },
+                        { value: " empowering everyone", is_bold: false }
+                    ],
+                    source: "user"
+                },
+                { title: [{ value: "No URL", is_bold: false }] }
+            ]
+        };
+    });
+    const response = {
+        statusCode: 200,
+        status(code) { this.statusCode = code; return this; },
+        json(body) { this.body = body; return this; }
+    };
+    await search({ query: { q: "rust language", engines: "mwmbl" } }, response);
+    assert.equal(response.statusCode, 200);
+    assert.equal(response.body.results.length, 1);
+    const [result] = response.body.results;
+    assert.equal(result.title, "Rust Programming Language");
+    assert.equal(result.content, "A language empowering everyone");
+    assert.equal(result.url, "https://rust-lang.org");
+    assert.equal(result.source, "Mwmbl");
+    assert.equal(response.body.sources.mwmbl, 1);
+});
+
+test("backend skips Mwmbl outside general search", async () => {
+    const hosts = [];
+    const search = loadBackendSearch(async url => {
+        hosts.push(new URL(url).hostname);
+        return { ok: true, status: 200, json: async () => ({ results: [] }) };
+    });
+    const response = {
+        statusCode: 200,
+        status(code) { this.statusCode = code; return this; },
+        json(body) { this.body = body; return this; }
+    };
+    await search({ query: { q: "cats", category: "images", engines: "mwmbl" } }, response);
+    assert.equal(response.statusCode, 200);
+    assert.equal(hosts.includes("api.mwmbl.org"), false);
+    assert.equal(response.body.sources.mwmbl, 0);
 });

@@ -7,9 +7,10 @@ const PORT = process.env.PORT || 3000;
 const SEARXNG_API = "https://searx-ie07.onrender.com/";
 const FOURGET_API = "https://search.yonderly.org/api/v1/web";
 const DEGOOG_API = "https://degoog.org/api/search";
+const MWMBL_API = "https://api.mwmbl.org/api/v1/search/";
 const WIKIPEDIA_API = "https://en.wikipedia.org/api/rest_v1/page/summary/";
 
-const SEARCH_ENGINES = ["searxng", "4get", "degoog"];
+const SEARCH_ENGINES = ["searxng", "4get", "degoog", "mwmbl"];
 
 app.use(express.json());
 
@@ -198,6 +199,59 @@ async function searchDegoog(query, category) {
     }
 }
 
+// Mwmbl returns title and extract as lists of { value, is_bold } segments.
+function joinMwmblText(segments) {
+    if (!Array.isArray(segments)) {
+        return "";
+    }
+
+    return segments
+        .map(segment => (segment && segment.value) || "")
+        .join("")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+async function searchMwmbl(query, category) {
+    if (category !== "general") {
+        return [];
+    }
+
+    try {
+        const params = new URLSearchParams();
+        params.set("s", query);
+
+        const url = `${MWMBL_API}?${params.toString()}`;
+
+        const response = await fetchJSONWithTimeout(url, 7000);
+
+        if (!response.ok) {
+            console.error("Mwmbl failed:", response.status);
+            return [];
+        }
+
+        const data = Array.isArray(response.data) ? response.data : [];
+
+        return data
+            .filter(result => result && result.url)
+            .map(result => {
+                const extract = joinMwmblText(result.extract);
+
+                return {
+                    title: joinMwmblText(result.title),
+                    url: result.url,
+                    content: extract,
+                    description: extract,
+                    source: "Mwmbl"
+                };
+            });
+
+    } catch (error) {
+        console.error("Mwmbl error:", error.message);
+        return [];
+    }
+}
+
 function getEnabledEngines(value) {
     if (value === undefined) {
         return SEARCH_ENGINES;
@@ -275,17 +329,20 @@ try {
     const [
     searxngResults,
     fourgetResults,
-    degoogResults
+    degoogResults,
+    mwmblResults
 ] = await Promise.all([
     engines.includes("searxng") ? searchSearXNG(query, category) : [],
     engines.includes("4get") ? search4get(query, category) : [],
-    engines.includes("degoog") ? searchDegoog(query, category) : []
+    engines.includes("degoog") ? searchDegoog(query, category) : [],
+    engines.includes("mwmbl") ? searchMwmbl(query, category) : []
 ]);
     const results =
     removeDuplicates([
         ...searxngResults,
         ...fourgetResults,
-        ...degoogResults
+        ...degoogResults,
+        ...mwmblResults
     ]);
 
     res.json({
@@ -295,7 +352,8 @@ try {
         sources: {
     searxng: searxngResults.length,
     fourget: fourgetResults.length,
-    degoog: degoogResults.length
+    degoog: degoogResults.length,
+    mwmbl: mwmblResults.length
 },
         responseTime:
             Date.now() - started
