@@ -214,6 +214,13 @@ The name **GronnFalk** was inspired by Norwegian-style naming, giving the projec
 To see JSON and crawl GronnFalk go to this page:
 [JSON API](https://gronnfalk-api-aijg.onrender.com/)
 
+### Contributors
+
+<a href="https://github.com/LiamProsser77/gronnfalk/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=LiamProsser77/gronnfalk" />
+</a>
+
+
 ### License 
 <a href="https://www.apache.org/licenses/LICENSE-2.0.html">
   <img src="1.png" alt="GronnFalk" width="200">
